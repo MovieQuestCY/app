@@ -1,3 +1,3 @@
 ./.idea
 /venv
-/myvenv
+/backend/auth/__pycache__
