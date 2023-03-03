@@ -34,13 +34,13 @@ jobs:
             ghcr.io/moviequestcy/front:latest
         
 
-  #redeploy:
-  #  name: Redeploy webhook call
-  #  runs-on: ubuntu-18.04
-  #  needs: [docker]
-  #  steps:
-  #    - name: Deploy docker container webhook
-  #      uses: joelwmale/webhook-action@master
-  #      env:
-  #        WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL  }}
-  #        data: "{ 'myField': 'myFieldValue'}"
+  redeploy:
+    name: Redeploy webhook call
+    runs-on: ubuntu-18.04
+    needs: [docker]
+    steps:
+      - name: Deploy docker container webhook
+        uses: joelwmale/webhook-action@master
+        env:
+          WEBHOOK_URL: root.neuvy.eu:9000/hooks/redeploy-moviequest
+          data: "{ 'myField': 'myFieldValue'}"
