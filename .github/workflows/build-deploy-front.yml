@@ -42,5 +42,5 @@ jobs:
       - name: Deploy docker container webhook
         uses: joelwmale/webhook-action@master
         env:
-          WEBHOOK_URL: root.neuvy.eu:9000/hooks/redeploy-moviequest
+          WEBHOOK_URL: ${{ secrets.WEBHOOKs_URL  }}
           data: "{ 'myField': 'myFieldValue'}"
