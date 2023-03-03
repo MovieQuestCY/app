@@ -2,7 +2,7 @@ name: build-deploy-front
 on:
   push:
     paths:
-    - 'front/**'
+    - 'frontend/**'
 jobs:
   docker:
     runs-on: ubuntu-latest
