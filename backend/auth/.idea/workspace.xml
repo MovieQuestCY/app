@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2fb4fc17-b823-477a-92b0-8e162a0bb3d4" name="Changes" comment="Add first backend auth service">
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../frontend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/Dockerfile" afterDir="false" />
-    </list>
+    <list default="true" id="2fb4fc17-b823-477a-92b0-8e162a0bb3d4" name="Changes" comment="Add first backend auth service" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -79,7 +76,7 @@
       <option name="presentableId" value="Default" />
       <updated>1677669813386</updated>
       <workItem from="1677669816325" duration="3120000" />
-      <workItem from="1677849167230" duration="1465000" />
+      <workItem from="1677849167230" duration="2064000" />
     </task>
     <task id="LOCAL-00001" summary="Add first backend auth service">
       <created>1677669895102</created>
