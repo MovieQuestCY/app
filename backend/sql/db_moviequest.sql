@@ -1,12 +1,17 @@
 CREATE DATABASE moviequest;
 USE moviequest;
 
+-- Changing groups for team as "groups" is a reserved word in MySQL
 CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL,
+    firstname VARCHAR(255) NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    movie_viewed VARCHAR,
+    team INT,
+    movies_watched TEXT,
+    profile_picture VARCHAR(255),
     PRIMARY KEY (id)
 );
 
