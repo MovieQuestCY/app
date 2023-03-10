@@ -1,12 +1,14 @@
 from fastapi import FastAPI
-import uvicorn
 from routes import auth
 
-app = FastAPI()
+app = FastAPI(
+    title="Auth API",
+    description="API for auth management",
+    version="0.1.0",
+    contact={
+        "name": "MovieQuest",
+        "url": "https://moviequest.fr",
+    },
+)
 
 app.include_router(auth.router)
-
-if __name__ == "__main__":
-    config = uvicorn.Config("main:app", port=5000, log_level="info")
-    server = uvicorn.Server(config)
-    server.run()
