@@ -1,4 +1,4 @@
-name: build-deploy-front
+name: build-deploy-auth-api
 on:
   push:
     paths:
