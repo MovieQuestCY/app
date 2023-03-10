@@ -15,6 +15,14 @@ CREATE TABLE users (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE tokens (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 CREATE TABLE movies (
     id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL,
