@@ -1,6 +1,6 @@
-from models.db import Database
+from app.models.db import Database
 from sqlalchemy import text
-from models.users import User
+from app.models.users import User
 import bcrypt
 
 async def get_user(email):

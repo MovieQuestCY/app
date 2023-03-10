@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from sqlalchemy import create_engine
-from models.users import User
-from controllers.auth import check_password, create_user, get_user
+from app.models.users import User
+from app.controllers.auth import check_password, create_user, get_user
 # import jwt
 import os
 
