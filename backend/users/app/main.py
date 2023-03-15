@@ -1,5 +1,9 @@
 from fastapi import FastAPI
-from routes import users
+from routes import users, teams
+from db import engine
+from models import sqlalchemy_schemas
+
+sqlalchemy_schemas.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Users API",
@@ -11,4 +15,9 @@ app = FastAPI(
     },
 )
 
-app.include_router(users.router)
+app.include_router(users.user_router)
+app.include_router(teams.teams_router)
+
+@app.get("/")
+def read_root():
+    return {"Hello": "Welcome to our API"}
