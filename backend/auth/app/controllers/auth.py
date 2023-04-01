@@ -1,10 +1,24 @@
+from fastapi import APIRouter, Depends
 from app.models.db import Database
+from sqlalchemy.orm import Session
 from sqlalchemy import text
 from app.models.users import User
 import bcrypt
 
-async def get_user(email):
-    db = Database()
+from backend.users.app.db import SessionLocal
+
+user_router = APIRouter(prefix="/auth")
+
+
+def get_db():
+    """Get a database session"""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+async def get_user(email, db: Session = Depends(get_db)):
     query = text("SELECT * FROM users WHERE email = :email")
     connection = await db.get_connection()
     result = await connection.execute(query)
@@ -12,7 +26,7 @@ async def get_user(email):
     print(result.keys())
     return result
 
-async def check_password(email,password):
+async def check_password(email,password, db: Session = Depends(get_db)):
     user = await get_user(email)
     return bcrypt.checkpw(password, user.password)
 
