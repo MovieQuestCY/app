@@ -25,7 +25,7 @@ def create_movie_route(movie: MovieCreate, db: Session = Depends(get_db)) -> Mov
     return create_movie(db=db, movie=movie)
 
 @movie_router.get("/{movie_id}", response_model=Movie)
-def read_movie_route(user_id: int, db: Session = Depends(get_db)) -> Movie:
+def read_movie_route(movie_id: int, db: Session = Depends(get_db)) -> Movie:
     db_movie = get_movie(db, movie_id=movie_id)
     if db_movie is None:
         raise HTTPException(status_code=404, detail="Movie not found")

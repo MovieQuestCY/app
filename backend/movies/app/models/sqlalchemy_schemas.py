@@ -7,7 +7,7 @@ class Base(DeclarativeBase):
     """The base class for all models"""
     pass
 
-class User(Base):
+class Movie(Base):
     """The sqlalchemy movie model, used to create the database 'movies' table"""
     __tablename__ = "movies"
 
