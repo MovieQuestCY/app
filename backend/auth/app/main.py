@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.router import auth
+from app.routes import auth
 app = FastAPI(
     title="Auth API",
     description="API for auth management",
