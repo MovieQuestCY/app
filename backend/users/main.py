@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from routes import users, teams
-from db import engine
-from models import sqlalchemy_schemas
+from .routes import users, teams
+from .db import engine
+from .models import sqlalchemy_schemas
 
 sqlalchemy_schemas.Base.metadata.create_all(bind=engine)
 

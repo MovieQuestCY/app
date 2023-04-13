@@ -5,6 +5,7 @@ from pydantic import BaseModel
 class MovieBase(BaseModel):
     """The base movie model"""
     title: str
+    description: str
     year: int
     genre: List[str]
     director: str

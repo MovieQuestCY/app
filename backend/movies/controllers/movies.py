@@ -1,8 +1,8 @@
-from models import sqlalchemy_schemas, pydantic_schemas
+from ..models import sqlalchemy_schemas, pydantic_schemas
 from sqlalchemy.orm import Session
 
-def get_movies(db: Session) -> sqlachemy_schemas.Movie:
-    return db.query(sqlachemy_schemas.Movie).all()
+def get_movies(db: Session, skip=int, limit=int) -> sqlalchemy_schemas.Movie:
+    return db.query(sqlalchemy_schemas.Movie).offset(skip).limit(limit).all()
 
 def get_movie(db: Session, movie_id: int) -> sqlalchemy_schemas.Movie:
     return db.query(sqlalchemy_schemas.Movie).filter(sqlalchemy_schemas.Movie.id == movie_id).first()
@@ -15,13 +15,7 @@ def create_movie(db: Session, movie: pydantic_schemas.MovieCreate) -> sqlalchemy
         title=movie.title,
         description=movie.description,
         year=movie.year,
-        runtime=movie.runtime,
-        rating=movie.rating,
-        metascore=movie.metascore,
-        votes=movie.votes,
-        gross_earning_in_mil=movie.gross_earning_in_mil,
         director=movie.director,
-        actor=movie.actor,
         genre=movie.genre,
     )
     db.add(db_movie)

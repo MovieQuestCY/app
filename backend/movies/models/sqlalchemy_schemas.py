@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import List, Optional
-from sqlalchemy import String, Column, Table, ForeignKey
-from sqlalchemy.orm import Mapped, relationship, mapped_column, DeclarativeBase
+from typing import List
+from sqlalchemy import String, Integer
+from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 
 class Base(DeclarativeBase):
     """The base class for all models"""
@@ -13,8 +13,9 @@ class Movie(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(250))
-    year: Mapped[int] = mapped_column(int)
-    genre: Mapped[List[str]] = mapped_column(String(50))
+    description: Mapped[str] = mapped_column(String(250))
+    year: Mapped[int] = mapped_column(Integer)
+    genre: Mapped[List[str]] = mapped_column(String(250))
     director: Mapped[str] = mapped_column(String(250))
 
     def __str__(self) -> str:
