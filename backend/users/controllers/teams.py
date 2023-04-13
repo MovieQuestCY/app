@@ -1,5 +1,5 @@
-from models import sqlalchemy_schemas, pydantic_schemas
-from controllers.users import get_user 
+from ..models import sqlalchemy_schemas, pydantic_schemas
+from ..controllers.users import get_user 
 from sqlalchemy.orm import Session
 
 def get_team(db: Session, team_id: int) -> sqlalchemy_schemas.Team:

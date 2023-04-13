@@ -1,10 +1,10 @@
 from typing import List
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
-from controllers.teams import create_team, get_team, get_teams, add_user_to_team, get_team_by_name, remove_user_from_team, delete_team, edit_team
-from controllers.users import get_user
-from models.pydantic_schemas import Team, TeamCreate, User
-from db import SessionLocal
+from ..controllers.teams import create_team, get_team, get_teams, add_user_to_team, get_team_by_name, remove_user_from_team, delete_team, edit_team
+from ..controllers.users import get_user
+from ..models.pydantic_schemas import Team, TeamCreate, User
+from ..db import SessionLocal
 
 teams_router = APIRouter(prefix="/teams")
 

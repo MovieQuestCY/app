@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
-from controllers.users import create_user, get_user, get_users, get_user_by_email, get_user_by_username, delete_user, edit_user
-from models.pydantic_schemas import User, UserCreate
-from db import SessionLocal
+from ..controllers.users import create_user, get_user, get_users, get_user_by_email, get_user_by_username, delete_user, edit_user
+from ..models.pydantic_schemas import User, UserCreate
+from ..db import SessionLocal
 
 user_router = APIRouter(prefix="/users")
 

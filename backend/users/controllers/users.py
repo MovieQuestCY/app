@@ -1,4 +1,4 @@
-from models import sqlalchemy_schemas, pydantic_schemas
+from ..models import sqlalchemy_schemas, pydantic_schemas
 from sqlalchemy.orm import Session
 
 def get_user(db: Session, user_id: int) -> sqlalchemy_schemas.User:

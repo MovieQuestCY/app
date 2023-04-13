@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
-from controllers.movies import create_movie, get_movie, get_movies, get_movie_by_title, delete_movie, edit_movie
-from models.pydantic_schemas import Movie, MovieCreate
-from db import SessionLocal
+from ..controllers.movies import create_movie, get_movie, get_movies, get_movie_by_title, delete_movie, edit_movie
+from ..models.pydantic_schemas import Movie, MovieCreate
+from ..db import SessionLocal
 
 movie_router = APIRouter(prefix="/movies")
 

@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-from routes import movies
-from db import engine
-from models import sqlalchemy_schemas
+from .routes import movies
+from .db import engine
+from .models import sqlalchemy_schemas
 
 sqlalchemy_schemas.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Movies API",
+    title=" VC API",
     description="API for movies management",
     version="0.1.0",
     contact={
@@ -15,7 +15,7 @@ app = FastAPI(
     },
 )
 
-app.include_router(movies.router)
+app.include_router(movies.movie_router)
 
 @app.get("/")
 def read_root():
