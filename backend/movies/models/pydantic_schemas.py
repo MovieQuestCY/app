@@ -4,11 +4,14 @@ from pydantic import BaseModel
 
 class MovieBase(BaseModel):
     """The base movie model"""
+    id: int
     title: str
-    description: str
-    year: int
-    genre: List[str]
-    director: str
+    overview: str
+    release_date: str
+    genres: str
+    vote_average: float
+    popularity: int
+    poster_path: str
 
 class MovieCreate(MovieBase):
     """The movie model for creating a new movie"""
@@ -16,8 +19,6 @@ class MovieCreate(MovieBase):
 
 class Movie(MovieBase):
     """The movie model for returning a movie"""
-    id: int
-
     class Config:
         """The config for the movie model"""
         orm_mode = True
