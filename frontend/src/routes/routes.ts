@@ -1,6 +1,7 @@
 import Home from './../pages/Home.vue';
 import About from './../pages/About.vue';
 import Contact from './../pages/Contact.vue';
+import Search from './../pages/Search.vue';
 
 export const routes = [
     {
@@ -14,6 +15,10 @@ export const routes = [
     {
         path: '/contact',
         component: Contact,
+    },
+    {
+        path: '/search/:movie',
+        component: Search,
     },
     {
         path: '/:catchAll(.*)',
