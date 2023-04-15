@@ -1,17 +1,21 @@
+// We're using camel_case for types to directly match the JSON response from the python backend or tmdb api.
+
 export interface Movie {
     id: number;
     title: string;
-    description: string;
-    year: number;
-    rating: number;
-    genre: string[];
-    image: string;
+    overview: string;
+    release_date: string;
+    vote_average: number;
+    genres: string;
+    popularity: number;
+    poster_path: string;
 }
 
 export interface User {
     id: number;
-    username: string;
-    password: string;
+    firstname: string;
+    lastname: string;
+    username?: string;
     email: string;
-    movie_viewed: Movie[];
+    profile_picture?: string;
 }
