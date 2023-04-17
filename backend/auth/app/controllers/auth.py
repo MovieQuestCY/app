@@ -1,22 +1,12 @@
-from app.models.db import Database
-from sqlalchemy import text
-
 from backend.auth.app.db import SessionLocal
-from ..models.pydantic_schemas import TokenData, User, UserCreate
+from ..models.pydantic_schemas import TokenData, User
 from backend.users.controllers.users import get_user,get_user_by_email
 import bcrypt
-
 from datetime import datetime, timedelta
 from typing import Annotated
-
 from jose import JWTError, jwt
-from passlib.context import CryptContext
-
-from typing import Union
-
-from fastapi import Depends, FastAPI, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from pydantic import BaseModel
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 from typing_extensions import Annotated
 
 def get_db():
@@ -29,7 +19,6 @@ def get_db():
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -50,11 +39,6 @@ async def check_password(email: str,password: str):
     elif bcrypt.checkpw(password, user.password):
         return True
     return False
-
-# def decode_token(token):
-#     #TODO : decode token
-#     return(0)
-
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(
