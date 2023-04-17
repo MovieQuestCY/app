@@ -5,7 +5,8 @@ COPY package*.json ./
 RUN npm install
 RUN --mount type=secret, id=TMDB_API_KEY 
 COPY . .
-RUN echo "export const tmdbKey = $TMDB_API_KEY" > ./src/secrets/index.ts
+RUN --mount type=secret, id=TMDB_API_KEY \
+echo "export const tmdbKey = $TMDB_API_KEY" > ./src/secrets/index.ts
 
 #build stage
 FROM develop-stage as build-stage
