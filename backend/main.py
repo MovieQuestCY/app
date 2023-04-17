@@ -4,7 +4,7 @@ import asyncio
 import sys
 
 async def run_webserver(module, port):
-    server_config = uvicorn.Config(module, port=port)
+    server_config = uvicorn.Config(module, port=port, reload=True)
     server = uvicorn.Server(server_config)
     await server.serve()
 
