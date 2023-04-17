@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN --mount=type=secret, id=TMDB_API_KEY \
+RUN --mount=type=secret,id=TMDB_API_KEY \
 echo "export const tmdbKey = $(cat /run/secrets/TMDB_API_KEY)" > ./src/secrets/index.ts
 
 #build stage
