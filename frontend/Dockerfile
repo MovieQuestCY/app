@@ -3,7 +3,9 @@ FROM node:current-alpine3.16 as develop-stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
+RUN --mount type=secret, id=TMDB_API_KEY 
 COPY . .
+RUN echo "export const tmdbKey = $TMDB_API_KEY" > ./src/secrets/index.ts
 
 #build stage
 FROM develop-stage as build-stage
