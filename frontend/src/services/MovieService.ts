@@ -63,6 +63,14 @@ class MovieService {
         const movies = await response.results as Movie[];
         return movies.slice(0, number);
     }
+
+    async searchMovieByName(name: string, number: number): Promise<Movie[]> {
+        const response = await this.fetchFromTmdb("search/movie?query=" + name, {
+            method: "GET",
+        });
+        const movies = await response.results as Movie[];
+        return movies.slice(0, number);
+    }
 }
 
 export default MovieService;
