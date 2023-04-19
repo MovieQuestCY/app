@@ -119,3 +119,16 @@ def edit_team(db: Session, team: pydantic_schemas.Team, new_name:str) -> sqlalch
     db.commit()
     db.refresh(team)
     return team
+
+def get_users_from_team(db: Session, team_id: int) -> list:
+    """Get a list of users from a team
+
+    Args:
+        db (Session): The sqlalchemy session
+        team_id (int): The id of the team
+
+    Returns:
+        list: A list of users
+    """
+    #db_team = get_team(db, team_id=team_id)
+    return db.query(sqlalchemy_schemas.User).filter(sqlalchemy_schemas.User.teams.any(id=team_id)).all()

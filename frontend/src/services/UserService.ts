@@ -1,4 +1,4 @@
-import { User } from "../models/types";
+import { User, UserCreation } from "../models/types";
 
 class UserService {
     private userApiUrl = "http://localhost:8082/users";
@@ -21,6 +21,18 @@ class UserService {
         const response = await fetch(this.userApiUrl);
         const users = await response.json() as User[];
         return users;
+    }
+
+    async registerUser(user: UserCreation): Promise<User> {
+        const response = await fetch(this.userApiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+        });
+        const newUser = await response.json();
+        return newUser;
     }
 }
 

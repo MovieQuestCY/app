@@ -9,6 +9,7 @@ class UserBase(BaseModel):
     username: Optional[str]
     email: str
     profile_picture: Optional[str]
+    favorite_genres: Optional[str]
 
 class UserCreate(UserBase):
     """The user model for creating a new user"""

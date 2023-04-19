@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
-from ..controllers.teams import create_team, get_team, get_teams, add_user_to_team, get_team_by_name, remove_user_from_team, delete_team, edit_team
+from ..controllers.teams import create_team, get_team, get_teams, add_user_to_team, get_team_by_name, remove_user_from_team, delete_team, edit_team, get_users_from_team
 from ..controllers.users import get_user
 from ..models.pydantic_schemas import Team, TeamCreate, User
 from ..db import SessionLocal
@@ -178,3 +178,22 @@ def edit_team_route(team_id: int, edited_team: TeamCreate, db: Session = Depends
     if edited_team.name is None or edited_team.name == "":
         raise HTTPException(status_code=400, detail="Team name cannot be empty")
     return edit_team(db=db, team=db_team, new_name=edited_team.name)
+
+@teams_router.get("/{team_id}/users", response_model=List[User])
+def get_users_in_team_route(team_id: int, db: Session = Depends(get_db)) -> List[User]:
+    """The endpoint for getting the users in a team
+
+    Args:
+        team_id (int): The id of the team
+        db (Session): The sqlalchemy session
+
+    Raises:
+        HTTPException: If the team does not exist
+
+    Returns:
+        List[User]: A list of users
+    """
+    db_team = get_team(db, team_id=team_id)
+    if db_team is None:
+        raise HTTPException(status_code=404, detail="Team not found")
+    return get_users_from_team(db=db, team_id=team_id)
