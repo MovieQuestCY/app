@@ -61,7 +61,7 @@ def create_user(db: Session, user: pydantic_schemas.UserCreate) -> sqlalchemy_sc
         sqlalchemy_schemas.User: The created user
     """
     hashed_password = user.password + "notreallyhashed" #TODO: actually hash the password
-    db_user = sqlalchemy_schemas.User(firstname=user.firstname, lastname=user.lastname, username=user.username, email=user.email, password=hashed_password, profile_picture=user.profile_picture)
+    db_user = sqlalchemy_schemas.User(firstname=user.firstname, lastname=user.lastname, username=user.username, email=user.email, password=hashed_password, profile_picture=user.profile_picture, favorite_genres=user.favorite_genres)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -91,6 +91,8 @@ def edit_user(db: Session, user_id: int, user: pydantic_schemas.UserCreate) -> s
         db_user.password = user.password + "notreallyhashed" #TODO: actually hash the password
     if user.profile_picture:
         db_user.profile_picture = user.profile_picture
+    if user.favorite_genres:
+        db_user.favorite_genres = user.favorite_genres
     db.commit()
     db.refresh(db_user)
     return db_user

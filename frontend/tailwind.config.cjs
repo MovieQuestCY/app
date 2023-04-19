@@ -4,6 +4,10 @@ module.exports = {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
+  safelist: [
+    'bg-gray-700',
+     'border-gray-600'
+  ],
   theme: {
     extend: {
       container: {

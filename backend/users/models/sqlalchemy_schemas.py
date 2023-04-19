@@ -26,6 +26,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(50))
     password: Mapped[str] = mapped_column(String(50))
     profile_picture: Mapped[Optional[str]] = mapped_column(String(250))
+    favorite_genres: Mapped[Optional[str]] = mapped_column(String(250))
 
     teams: Mapped[Optional[List[Team]]] = relationship("Team", secondary=has_team, back_populates="users")
 

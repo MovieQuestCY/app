@@ -18,4 +18,24 @@ export interface User {
     username?: string;
     email: string;
     profile_picture?: string;
+    favorite_genres?: string;
+}
+
+export interface UserCreation {
+    firstname: string;
+    lastname: string;
+    username?: string;
+    email: string;
+    profile_picture?: string;
+    favorite_genres?: string;
+    password: string;
+}
+
+export interface TeamResponse {
+    id: number;
+    name: string;
+}
+
+export interface Team extends TeamResponse {
+    members: User[];
 }
