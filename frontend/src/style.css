@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    .input {
+      @apply border-[1px] rounded-md w-full border-gray-700 py-1 pl-2 bg-gray-800 focus-visible:!outline-none ;
+    }
+  }
+
 html, body {
     font-family: 'Poppins', sans-serif;
 }

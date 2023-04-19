@@ -1,6 +1,6 @@
 <template>
     <nav class="container flex justify-between items-center pt-5 ">
-        <ul class="flex gap-10 justify-center font-medium">
+        <ul class="flex gap-10 justify-center font-medium items-center">
             <li>
                 <router-link to="/" class="hover:text-red-500 transition-all duration-300">Home</router-link>
             </li>
@@ -8,7 +8,13 @@
                 <router-link to="/about" class="hover:text-red-500 transition-all duration-300">About</router-link>
             </li>
             <li>
-                <router-link to="/register" class="hover:text-red-500 transition-all duration-300">Contact</router-link>
+                <router-link to="/contact" class="hover:text-red-500 transition-all duration-300">Contact</router-link>
+            </li>
+            <li>
+                <hr class="w-[1px] h-6 bg-gray-50" />
+            </li>
+            <li>
+                <router-link to="/login" class="hover:text-red-500 transition-all duration-300">Login</router-link>
             </li>
         </ul>
 
