@@ -4,6 +4,10 @@ import Contact from './../pages/Contact.vue';
 import Search from './../pages/Search.vue';
 import Login from './../pages/Login.vue';
 import Register from './../pages/Register.vue';
+import Dashboard from './../pages/Dashboard.vue';
+import UserMovies from './../components/dashboard/UserMovies.vue';
+import UserTeams from './../components/dashboard/UserTeams.vue';
+import FindMovies from './../components/dashboard/FindMovies.vue';
 
 export const routes = [
     {
@@ -29,6 +33,24 @@ export const routes = [
     {
         path: '/search/:movie',
         component: Search,
+    },
+    {
+        path: '/dashboard',
+        component: Dashboard,
+        children: [
+            {
+                path: 'movies',
+                component: UserMovies,
+            },
+            {
+                path: 'teams',
+                component: UserTeams,
+            },
+            {
+                path: 'find',
+                component: FindMovies,
+            }
+        ]
     },
     {
         path: '/:catchAll(.*)',

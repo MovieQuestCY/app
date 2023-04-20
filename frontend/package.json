@@ -4,11 +4,12 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "vite --host 0.0.0.0",
+        "dev": "vite",
         "build": "vue-tsc && vite build",
         "preview": "vite preview"
     },
     "dependencies": {
+        "pinia": "^2.0.34",
         "vue": "^3.2.45",
         "vue-router": "^4.1.6",
         "vue3-steppy": "^1.1.0",
