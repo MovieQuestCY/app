@@ -23,7 +23,7 @@ class UserService {
         return users;
     }
 
-    async registerUser(user: UserCreation): Promise<User> {
+    async register(user: UserCreation): Promise<User> {
         const response = await fetch(this.userApiUrl, {
             method: "POST",
             headers: {
@@ -33,6 +33,16 @@ class UserService {
         });
         const newUser = await response.json();
         return newUser;
+    }
+
+    async login(email: string, password: string): Promise<Response> {
+        return await fetch(`${this.userApiUrl}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+        });
     }
 }
 
