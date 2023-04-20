@@ -109,3 +109,19 @@ def delete_user(db: Session, user_id: int) -> sqlalchemy_schemas.User:
     db.commit()
     return db_user
 
+def login_user(db: Session, email: str, password: str) -> sqlalchemy_schemas.User:
+    """Login a user
+
+    Args:
+        db (Session): The sqlalchemy session
+        email (str): The email of the user
+        password (str): The password of the user
+
+    Returns:
+        sqlalchemy_schemas.User: The logged in user
+    """
+    db_user = db.query(sqlalchemy_schemas.User).filter(sqlalchemy_schemas.User.email == email).first()
+    if db_user:
+        if db_user.password == password + "notreallyhashed": #TODO: actually hash the password
+            return db_user
+    return None

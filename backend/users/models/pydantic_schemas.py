@@ -11,6 +11,11 @@ class UserBase(BaseModel):
     profile_picture: Optional[str]
     favorite_genres: Optional[str]
 
+class UserLogin(BaseModel):
+    """The user model for logging in a user"""
+    email: str
+    password: str
+
 class UserCreate(UserBase):
     """The user model for creating a new user"""
     password: str
@@ -22,6 +27,10 @@ class User(UserBase):
     class Config:
         """The config for the user model"""
         orm_mode = True
+
+class UserLogged(User):
+    """The user model for returning a user after creation"""
+    token: str
 
 class TeamBase(BaseModel):
     """The base team model"""

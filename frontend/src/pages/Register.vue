@@ -46,6 +46,7 @@
                                     class="input"  />
                             </div>
                         </div>
+                        <p class=" text-center">Already user ? <router-link to="/login" class="underline">Login here</router-link>.</p>
                         <p class="text-red-500 text-center">{{ errorMessage }}</p>
                     </div>
                 </form>
@@ -168,7 +169,7 @@ const handleSubmit = async () => {
         favorite_genres: genresList.value.map((genre: Genre) => genre.name).join(","),
     };
     try {
-        const responseUser = await userService.registerUser(newUser) as User;
+        const responseUser = await userService.register(newUser) as User;
         if(!responseUser) {
             errorMessage.value = "An error occured";
             return;
