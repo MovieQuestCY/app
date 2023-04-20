@@ -30,6 +30,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useAuthStore } from "../stores/authStore";
 
 const errorMessage = ref<string>('');
 const formData = ref<Record<string, string>>({
@@ -37,13 +38,16 @@ const formData = ref<Record<string, string>>({
     password: "",
 });
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
     if (formData.value.email === "" || formData.value.password === "") {
         errorMessage.value = "Please fill in all fields";
         return;
     }
 
-    errorMessage.value = "";
-    console.log(formData.value);
+    await useAuthStore().login(formData.value.email, formData.value.password).then((res) => {
+        if (res) {
+            errorMessage.value = res.message;
+        }
+    });
 };
 </script>

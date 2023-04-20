@@ -12,6 +12,12 @@ module.exports = {
     extend: {
       container: {
         center: true,
+      },
+      height: {
+        'navbar-dashboard': "calc(100vh - 132px)",
+      },
+      minHeight: {
+        'navbar-dashboard': "calc(100vh - 132px)",
       }
     },
   },

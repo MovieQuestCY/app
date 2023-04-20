@@ -1,8 +1,8 @@
 from typing import List
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
-from ..controllers.users import create_user, get_user, get_users, get_user_by_email, get_user_by_username, delete_user, edit_user
-from ..models.pydantic_schemas import User, UserCreate
+from ..controllers.users import create_user, get_user, get_users, get_user_by_email, get_user_by_username, delete_user, edit_user, login_user
+from ..models.pydantic_schemas import User, UserCreate, UserLogin, UserLogged
 from ..db import SessionLocal
 
 user_router = APIRouter(prefix="/users")
@@ -143,5 +143,28 @@ def edit_user_route(user_id: int, user: UserCreate, db: Session = Depends(get_db
         raise HTTPException(status_code=404, detail="User not found")
     return edit_user(db, user_id=user_id, user=user)
 
+@user_router.post("/login", response_model=UserLogged)
+def login_user_route(user: UserLogin, db: Session = Depends(get_db)) -> UserLogged:
+    """The endpoint for logging in a user
+
+    Args:
+        email (str): The email of the user
+        password (str): The password of the user
+        db (Session): The sqlalchemy session
+
+    Raises:
+        HTTPException: If the user does not exist
+
+    Returns:
+        User: The logged in user
+    """
+    db_user = get_user_by_email(db, email=user.email)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    logged_in_user = login_user(db, email=user.email, password=user.password)
+    if logged_in_user is None:
+        raise HTTPException(status_code=401, detail="Incorrect password")
+    logged_in_user.token = "monfaketoken"
+    return logged_in_user
 
 
