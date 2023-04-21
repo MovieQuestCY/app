@@ -1,7 +1,7 @@
 import { User, UserCreation } from "../models/types";
 
 class UserService {
-    private userApiUrl = "http://localhost:8082/users";
+    private userApiUrl = import.meta.env.VITE_APP_USERS_API_URL;
     private static instance: UserService;
 
     static getInstance() {
@@ -12,7 +12,7 @@ class UserService {
     }
 
     async getUser(id: number): Promise<User> {
-        const response = await fetch(`${this.userApiUrl}/${id}`);
+        const response = await fetch(`${this.userApiUrl}/${id}/`);
         const user = await response.json();
         return user;
     }
@@ -36,7 +36,7 @@ class UserService {
     }
 
     async login(email: string, password: string): Promise<Response> {
-        return await fetch(`${this.userApiUrl}/login`, {
+        return await fetch(`${this.userApiUrl}login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
