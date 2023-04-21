@@ -3,7 +3,7 @@ import {tmdbToken} from "./../secrets"
 import { getGenresFromIds } from "../utils";
 
 class MovieService {
-    private movieApiUrl = "http://localhost:8081/movies";
+    private movieApiUrl = import.meta.env.VITE_APP_MOVIES_API_URL;
     private tmdbApiUrl = "https://api.themoviedb.org/3";
     private static instance: MovieService;
 

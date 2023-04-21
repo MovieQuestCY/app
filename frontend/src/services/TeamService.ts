@@ -1,7 +1,7 @@
 import { Team, TeamResponse } from "../models/types";
 
 class TeamService {
-    private teamApiUrl = "http://localhost:8082/teams";
+    private teamApiUrl = import.meta.env.VITE_APP_USERS_API_URL;
     private static instance: TeamService;
 
     static getInstance() {
