@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import List
-from sqlalchemy import String, Integer, Float
-from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
+from typing import List, Optional
+from sqlalchemy import String, Integer, Float, Table, ForeignKey, Column
+from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
 
 class Base(DeclarativeBase):
     """The base class for all models"""
