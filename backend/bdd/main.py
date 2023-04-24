@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .db import engine
-from .models import sqlalchemy_schemas
+from .schemas.sqlalchemy import schemas
 
-sqlalchemy_schemas.Base.metadata.create_all(bind=engine)
+schemas.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="BDD Builder API",
