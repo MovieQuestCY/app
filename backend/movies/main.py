@@ -4,7 +4,7 @@ from .routes import movies
 from .db import engine
 from .models import sqlalchemy_schemas
 
-sqlalchemy_schemas.Base.metadata.create_all(bind=engine)
+#sqlalchemy_schemas.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title=" VC API",
