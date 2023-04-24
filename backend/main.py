@@ -12,8 +12,10 @@ async def run_webserver(module, port):
 async def main():
     done, pending = await asyncio.wait(
         [
-            run_webserver("movies.main:app",8081),
-            run_webserver("users.main:app",8082),
+            run_webserver("movies.main:app",8082),
+            run_webserver("users.main:app",8080),
+            run_webserver("teams.main:app",8081),
+            run_webserver("bdd.main:app",8083),
         ],
         return_when=asyncio.FIRST_COMPLETED,
     )
