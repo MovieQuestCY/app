@@ -15,7 +15,7 @@ async def main():
             run_webserver("bdd.main:app",8083),
             run_webserver("movies.main:app",8082),
             run_webserver("users.main:app",8084),
-            # run_webserver("teams.main:app",8081),
+            run_webserver("teams.main:app",8081),
         ],
         return_when=asyncio.FIRST_COMPLETED,
     )
