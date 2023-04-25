@@ -26,6 +26,7 @@ class Movie(Base):
     vote_average: Mapped[float] = mapped_column(Float)
     popularity: Mapped[int] = mapped_column(Integer)
     poster_path: Mapped[str] = mapped_column(String(250))
+    users: Mapped[Optional[List[User]]] = relationship("User", secondary=has_watched, back_populates="movies")
 
     def __str__(self) -> str:
         return f"Movie(id={self.id}, title={self.title}, overview={self.overview}, release_date={self.release_date}, genres={self.genres}, vote_average={self.vote_average}, popularity={self.popularity}, poster_path={self.poster_path})"
@@ -51,6 +52,7 @@ class User(Base):
     favorite_genres: Mapped[Optional[str]] = mapped_column(String(250))
 
     teams: Mapped[Optional[List[Team]]] = relationship("Team", secondary=has_team, back_populates="users")
+    movies: Mapped[Optional[List[Movie]]] = relationship("Movie", secondary=has_watched,back_populates="users")
 
     def __str__(self) -> str:
         return f"User(id={self.id}, firstname={self.firstname}, lastname={self.lastname})"

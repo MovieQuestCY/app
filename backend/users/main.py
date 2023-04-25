@@ -1,10 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import users, teams
-from .db import engine
-from .models import sqlalchemy_schemas
-
-#sqlalchemy_schemas.Base.metadata.create_all(bind=engine)
+from .routes import users
 
 app = FastAPI(
     title="Users API",
@@ -28,7 +24,6 @@ app.add_middleware(
 )
 
 app.include_router(users.user_router)
-app.include_router(teams.teams_router)
 
 @app.get("/")
 def read_root():

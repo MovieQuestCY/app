@@ -1,10 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import users, teams
-from .db import engine
-from .models import sqlalchemy_schemas
-
-#sqlalchemy_schemas.Base.metadata.create_all(bind=engine)
+from .routes import teams
 
 app = FastAPI(
     title="teams API",

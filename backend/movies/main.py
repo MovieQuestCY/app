@@ -1,13 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routes import movies
-from .db import engine
-from .models import sqlalchemy_schemas
-
-#sqlalchemy_schemas.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title=" VC API",
+    title="Movie API",
     description="API for movies management",
     version="0.1.0",
     contact={

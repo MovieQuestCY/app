@@ -1,17 +1,18 @@
-from ..models import sqlalchemy_schemas, pydantic_schemas
+from bdd.schemas import pydantic
+from bdd.schemas import sqlalchemy
 from sqlalchemy.orm import Session
 
-def get_movies(db: Session, skip=int, limit=int) -> sqlalchemy_schemas.Movie:
-    return db.query(sqlalchemy_schemas.Movie).offset(skip).limit(limit).all()
+def get_movies(db: Session, skip=int, limit=int) -> sqlalchemy.Movie:
+    return db.query(sqlalchemy.Movie).offset(skip).limit(limit).all()
 
-def get_movie(db: Session, movie_id: int) -> sqlalchemy_schemas.Movie:
-    return db.query(sqlalchemy_schemas.Movie).filter(sqlalchemy_schemas.Movie.id == movie_id).first()
+def get_movie(db: Session, movie_id: int) -> sqlalchemy.Movie:
+    return db.query(sqlalchemy.Movie).filter(sqlalchemy.Movie.id == movie_id).first()
 
-def get_movie_by_title(db: Session, title: str) -> sqlalchemy_schemas.Movie:
-    return db.query(sqlalchemy_schemas.Movie).filter(sqlalchemy_schemas.Movie.title == title).first()
+def get_movie_by_title(db: Session, title: str) -> sqlalchemy.Movie:
+    return db.query(sqlalchemy.Movie).filter(sqlalchemy.Movie.title == title).first()
 
-def create_movie(db: Session, movie: pydantic_schemas.MovieCreate) -> sqlalchemy_schemas.Movie:
-    db_movie = sqlalchemy_schemas.Movie(
+def create_movie(db: Session, movie: pydantic.MovieCreate) -> sqlalchemy.Movie:
+    db_movie = sqlalchemy.Movie(
         id=movie.id,
         title=movie.title,
         overview=movie.overview,
@@ -26,8 +27,8 @@ def create_movie(db: Session, movie: pydantic_schemas.MovieCreate) -> sqlalchemy
     db.refresh(db_movie)
     return db_movie
 
-def edit_movie(db: Session, movie: pydantic_schemas.Movie, movie_id: int) -> sqlalchemy_schemas.Movie:
-    db_movie = db.query(sqlalchemy_schemas.Movie).filter(sqlalchemy_schemas.Movie.id == movie_id).first()
+def edit_movie(db: Session, movie: pydantic.Movie, movie_id: int) -> sqlalchemy.Movie:
+    db_movie = db.query(sqlalchemy.Movie).filter(sqlalchemy.Movie.id == movie_id).first()
     if movie.title:
         db_movie.title = movie.title
     if movie.overview:
@@ -46,8 +47,8 @@ def edit_movie(db: Session, movie: pydantic_schemas.Movie, movie_id: int) -> sql
     db.refresh(db_movie)
     return db_movie
 
-def delete_movie(db: Session, movie_id: int) -> sqlalchemy_schemas.Movie:
-    db_movie = db.query(sqlalchemy_schemas.Movie).filter(sqlalchemy_schemas.Movie.id == movie_id).first()
+def delete_movie(db: Session, movie_id: int) -> sqlalchemy.Movie:
+    db_movie = db.query(sqlalchemy.Movie).filter(sqlalchemy.Movie.id == movie_id).first()
     db.delete(db_movie)
     db.commit()
     return db_movie

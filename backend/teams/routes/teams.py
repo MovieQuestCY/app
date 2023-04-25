@@ -3,7 +3,8 @@ from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
 from ..controllers.teams import create_team, get_team, get_teams, add_user_to_team, get_team_by_name, remove_user_from_team, delete_team, edit_team, get_users_from_team
 from ..controllers.users import get_user
-from ..models.pydantic_schemas import Team, TeamCreate, User
+from bdd.schemas.pydantic.Team import Team, TeamCreate
+from bdd.schemas.pydantic.User import User
 from ..db import SessionLocal
 
 teams_router = APIRouter(prefix="/teams")
@@ -83,7 +84,7 @@ def add_user_to_team_route(team_id: int, user_id: int, db: Session = Depends(get
         HTTPException: If the user or team does not exist
 
     Returns:
-        sqlalchemy_schemas.User: The user with the given id
+        sqlalchemy.User: The user with the given id
     """
     db_user = get_user(db, user_id=user_id)
     db_team = get_team(db, team_id=team_id)
@@ -125,7 +126,7 @@ def remove_user_from_team_route(team_id: int, user_id: int, db: Session = Depend
         HTTPException: If the user or team does not exist
 
     Returns:
-        sqlalchemy_schemas.User: The user with the given id
+        sqlalchemy.User: The user with the given id
     """
     db_user = get_user(db, user_id=user_id)
     db_team = get_team(db, team_id=team_id)
