@@ -1,0 +1,19 @@
+api:
+  dashboard: true
+
+entryPoints:
+  web:
+    address: :80
+
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+  file:
+    filename: /configurations/dynamic.yml
+experimental:
+  plugins:
+    jwt-validation-middleware:
+      moduleName: "github.com/legege/jwt-validation-middleware"
+      version: "v0.2.1"
