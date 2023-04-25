@@ -9,6 +9,7 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+
     ports:
       - "80:80"
       - "8080:8080"
@@ -19,12 +20,14 @@ services:
       - "traefik.http.routers.api.service=api@internal"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik-data/traefik.yml:/traefik.yml:ro
+      - ./traefik-data/acme.json:/acme.json
+      - ./traefik-data/configurations:/configurations
+
   front:
     container_name: front
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile-dev
-    command: npm run dev
+    image: appfront:latest
+    command:  [sh, -c, "npm install && npm run dev"]
     expose:
       - 3000
       - 3333
@@ -84,6 +87,7 @@ services:
       - "traefik.http.routers.movies.rule=Host(`movies.dev.neuvy.eu`)"
       - "traefik.http.routers.movies.service=movies"
       - "traefik.http.services.movies.loadbalancer.server.port=80"
+      - "traefik.http.routers.movies.middlewares=my-jwt-validation-middleware@file"
 
   mysql:
     container_name: mysql
