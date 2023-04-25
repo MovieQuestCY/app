@@ -1,7 +1,5 @@
 from ..models import sqlalchemy_schemas, pydantic_schemas
 from sqlalchemy.orm import Session
-import jwt
-from datetime import datetime, timedelta
 
 def get_user(db: Session, user_id: int) -> sqlalchemy_schemas.User:
     """Get a user by id
@@ -110,23 +108,6 @@ def delete_user(db: Session, user_id: int) -> sqlalchemy_schemas.User:
     db.delete(db_user)
     db.commit()
     return db_user
-
-def create_jwt_token(secret: str, algorithm: str, user: sqlalchemy_schemas.User) -> str:
-    """Create a jwt token
-
-    Args:
-        secret (str): The secret to use
-        algorithm (str): The algorithm to use
-        user (sqlalchemy_schemas.User): The user to create the token for
-
-    Returns:
-        str: The jwt token
-    """
-    
-    expiration = datetime.utcnow() + timedelta(days=14)
-    to_encode = {"exp": expiration, "sub": str(user.id)}
-    encoded_jwt = jwt.encode(to_encode, secret, algorithm=algorithm)
-    return encoded_jwt
 
 def login_user(db: Session, email: str, password: str) -> sqlalchemy_schemas.User:
     """Login a user

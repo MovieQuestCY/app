@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from .routes import users, teams
 from .db import engine
 from .models import sqlalchemy_schemas
+from typing import Dict, Any
 
 sqlalchemy_schemas.Base.metadata.create_all(bind=engine)
 
@@ -33,3 +34,9 @@ app.include_router(teams.teams_router)
 @app.get("/")
 def read_root():
     return {"Hello": "Welcome to our API"}
+
+@app.get("/test")
+def return_request(request: Request):
+    headers = dict(request.headers)
+    query_params = dict(request.query_params)
+    return {"headers": headers, "query_params": query_params}

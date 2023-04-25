@@ -1,12 +1,13 @@
 from typing import List
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
-from ..controllers.users import create_user, get_user, get_users, get_user_by_email, get_user_by_username, delete_user, edit_user, login_user
+from ..controllers.users import create_user, get_user, get_users, get_user_by_email, get_user_by_username, delete_user, edit_user, login_user, create_jwt_token
 from ..models.pydantic_schemas import User, UserCreate, UserLogin, UserLogged
 from ..db import SessionLocal
 
 user_router = APIRouter(prefix="/users")
-
+secret_key = "ThisIsMyVerySecret"
+algorithm = "HS256"
 # Dependency
 def get_db():
     """Get a database session"""
@@ -164,7 +165,7 @@ def login_user_route(user: UserLogin, db: Session = Depends(get_db)) -> UserLogg
     logged_in_user = login_user(db, email=user.email, password=user.password)
     if logged_in_user is None:
         raise HTTPException(status_code=401, detail="Incorrect password")
-    logged_in_user.token = "monfaketoken"
+    logged_in_user.token = create_jwt_token(secret_key, algorithm, logged_in_user)
     return logged_in_user
 
 
