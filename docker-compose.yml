@@ -26,7 +26,9 @@ services:
 
   front:
     container_name: front
-    image: appfront:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-dev
     command:  [sh, -c, "npm install && npm run dev"]
     expose:
       - 3000
@@ -133,7 +135,7 @@ services:
     container_name: mysql
     image: mysql
     ports:
-      - 3306:3306
+      - 3307:3306
     environment:
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_DATABASE=moviequest
