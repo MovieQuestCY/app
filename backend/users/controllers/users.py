@@ -1,5 +1,5 @@
 from bdd.schemas.pydantic.User import UserCreate
-from bdd.schemas.sqlalchemy import User
+from bdd.schemas.sqlalchemy.schemas import User
 from sqlalchemy.orm import Session
 
 def get_user(db: Session, user_id: int) -> User:
