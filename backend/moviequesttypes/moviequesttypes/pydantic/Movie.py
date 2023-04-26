@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pydantic import BaseModel
 
-class MovieBase(BaseModel):
+class PMovieBase(BaseModel):
     """The base movie model"""
     id: int
     title: str
@@ -12,11 +12,11 @@ class MovieBase(BaseModel):
     popularity: int
     poster_path: str
 
-class MovieCreate(MovieBase):
+class PMovieCreate(PMovieBase):
     """The movie model for creating a new movie"""
     pass
 
-class Movie(MovieBase):
+class PMovie(PMovieBase):
     """The movie model for returning a movie"""
     class Config:
         """The config for the movie model"""

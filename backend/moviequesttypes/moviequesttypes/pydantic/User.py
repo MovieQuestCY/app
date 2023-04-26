@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Optional
 from pydantic import BaseModel
 
-class UserBase(BaseModel):
+class PUserBase(BaseModel):
     """The base user model"""
     firstname: str
     lastname: str
@@ -11,16 +11,16 @@ class UserBase(BaseModel):
     profile_picture: Optional[str]
     favorite_genres: Optional[str]
 
-class UserLogin(BaseModel):
+class PUserLogin(BaseModel):
     """The user model for logging in a user"""
     email: str
     password: str
 
-class UserCreate(UserBase):
+class PUserCreate(PUserBase):
     """The user model for creating a new user"""
     password: str
 
-class User(UserBase):
+class PUser(PUserBase):
     """The user model for returning a user"""
     id: int
 
@@ -28,7 +28,7 @@ class User(UserBase):
         """The config for the user model"""
         orm_mode = True
 
-class UserLogged(User):
+class PUserLogged(PUser):
     """The user model for returning a user after creation"""
     token: str
 

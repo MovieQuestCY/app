@@ -2,7 +2,7 @@ from typing import List
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
 from ..controllers.users import create_user, get_user, get_users, get_user_by_email, get_user_by_username, delete_user, edit_user, login_user
-from bdd.schemas.pydantic.User import User, UserCreate, UserLogin, UserLogged
+from moviequesttypes import PUser, PUserCreate, PUserLogin, PUserLogged
 from ..db import SessionLocal
 
 user_router = APIRouter(prefix="/users")
@@ -16,8 +16,8 @@ def get_db():
     finally:
         db.close()
 
-@user_router.post("/", response_model=User)
-def create_user_route(user: UserCreate, db: Session = Depends(get_db)) -> User:
+@user_router.post("/", response_model=PUser)
+def create_user_route(user: PUserCreate, db: Session = Depends(get_db)) -> PUser:
     """The endpoint for creating a new user
 
     Args:
@@ -35,8 +35,8 @@ def create_user_route(user: UserCreate, db: Session = Depends(get_db)) -> User:
         raise HTTPException(status_code=400, detail="Email already registered")
     return create_user(db=db, user=user)
 
-@user_router.get("/{user_id}", response_model=User)
-def read_user_route(user_id: int, db: Session = Depends(get_db)) -> User:
+@user_router.get("/{user_id}", response_model=PUser)
+def read_user_route(user_id: int, db: Session = Depends(get_db)) -> PUser:
     """The endpoint for getting a user by id
 
     Args:
@@ -54,8 +54,8 @@ def read_user_route(user_id: int, db: Session = Depends(get_db)) -> User:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-@user_router.get("/", response_model=List[User])
-def read_users_route(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> List[User]:
+@user_router.get("/", response_model=List[PUser])
+def read_users_route(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> List[PUser]:
     """The endpoint for getting all users
 
     Args:
@@ -69,8 +69,8 @@ def read_users_route(skip: int = 0, limit: int = 100, db: Session = Depends(get_
     users = get_users(db, skip=skip, limit=limit)
     return users
 
-@user_router.get("/by_email/{email}", response_model=User)
-def read_user_by_email_route(email: str, db: Session = Depends(get_db)) -> User:
+@user_router.get("/by_email/{email}", response_model=PUser)
+def read_user_by_email_route(email: str, db: Session = Depends(get_db)) -> PUser:
     """The endpoint for getting a user by email
 
     Args:
@@ -88,8 +88,8 @@ def read_user_by_email_route(email: str, db: Session = Depends(get_db)) -> User:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-@user_router.get("/by_username/{username}", response_model=User)
-def read_user_by_username_route(username: str, db: Session = Depends(get_db)) -> User:
+@user_router.get("/by_username/{username}", response_model=PUser)
+def read_user_by_username_route(username: str, db: Session = Depends(get_db)) -> PUser:
     """The endpoint for getting a user by username (case insensitive)
 
     Args:
@@ -107,8 +107,8 @@ def read_user_by_username_route(username: str, db: Session = Depends(get_db)) ->
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-@user_router.delete("/{user_id}", response_model=User)
-def delete_user_route(user_id: int, db: Session = Depends(get_db)) -> User:
+@user_router.delete("/{user_id}", response_model=PUser)
+def delete_user_route(user_id: int, db: Session = Depends(get_db)) -> PUser:
     """The endpoint for deleting a user
 
     Args:
@@ -123,8 +123,8 @@ def delete_user_route(user_id: int, db: Session = Depends(get_db)) -> User:
         raise HTTPException(status_code=404, detail="User not found")
     return delete_user(db, user_id=user_id)
 
-@user_router.put("/{user_id}", response_model=User)
-def edit_user_route(user_id: int, user: UserCreate, db: Session = Depends(get_db)) -> User:
+@user_router.put("/{user_id}", response_model=PUser)
+def edit_user_route(user_id: int, user: PUserCreate, db: Session = Depends(get_db)) -> PUser:
     """The endpoint for editing a user
 
     Args:
@@ -143,8 +143,8 @@ def edit_user_route(user_id: int, user: UserCreate, db: Session = Depends(get_db
         raise HTTPException(status_code=404, detail="User not found")
     return edit_user(db, user_id=user_id, user=user)
 
-@user_router.post("/login", response_model=UserLogged)
-def login_user_route(user: UserLogin, db: Session = Depends(get_db)) -> UserLogged:
+@user_router.post("/login", response_model=PUserLogged)
+def login_user_route(user: PUserLogin, db: Session = Depends(get_db)) -> PUserLogged:
     """The endpoint for logging in a user
 
     Args:

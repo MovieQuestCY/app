@@ -1,5 +1,4 @@
-from bdd.schemas.pydantic.User import UserCreate
-from bdd.schemas.sqlalchemy.schemas import User
+from moviequesttypes import User, PUserCreate
 from sqlalchemy.orm import Session
 
 def get_user(db: Session, user_id: int) -> User:
@@ -51,12 +50,12 @@ def get_users(db: Session, skip: int = 0, limit: int = 100) -> list:
     """
     return db.query(User).offset(skip).limit(limit).all()
 
-def create_user(db: Session, user: UserCreate) -> User:
+def create_user(db: Session, user: PUserCreate) -> User:
     """Create a new user
 
     Args:
         db (Session): The sqlalchemy session
-        user (UserCreate): The user to create
+        user (PUserCreate): The user to create
 
     Returns:
         User: The created user
@@ -68,7 +67,7 @@ def create_user(db: Session, user: UserCreate) -> User:
     db.refresh(db_user)
     return db_user
 
-def edit_user(db: Session, user_id: int, user: UserCreate) -> User:
+def edit_user(db: Session, user_id: int, user: PUserCreate) -> User:
     """Edit a user
 
     Args:

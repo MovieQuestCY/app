@@ -1,14 +1,14 @@
 from __future__ import annotations
 from pydantic import BaseModel
 
-class TeamBase(BaseModel):
+class PTeamBase(BaseModel):
     """The base team model"""
     name: str
 
-class TeamCreate(TeamBase):
+class PTeamCreate(PTeamBase):
     pass
 
-class Team(TeamBase):
+class PTeam(PTeamBase):
     """The team model for returning a team"""
     id: int
 

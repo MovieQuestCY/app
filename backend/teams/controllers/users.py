@@ -1,8 +1,9 @@
 from bdd.schemas import pydantic
-from bdd.schemas import sqlalchemy
+from moviequesttypes import User, PUser, PUserCreate
+from moviequesttypes import Movie
 from sqlalchemy.orm import Session
 
-def get_user(db: Session, user_id: int) -> sqlalchemy.User:
+def get_user(db: Session, user_id: int) -> User:
     """Get a user by id
 
     Args:
@@ -10,11 +11,11 @@ def get_user(db: Session, user_id: int) -> sqlalchemy.User:
         user_id (int): The id of the user
 
     Returns:
-        sqlalchemy.User: The given user
+        User: The given user
     """
-    return db.query(sqlalchemy.User).filter(sqlalchemy.User.id == user_id).first()
+    return db.query(User).filter(User.id == user_id).first()
 
-def get_user_by_email(db: Session, email: str) -> sqlalchemy.User:
+def get_user_by_email(db: Session, email: str) -> User:
     """Get a user by email
 
     Args:
@@ -22,11 +23,11 @@ def get_user_by_email(db: Session, email: str) -> sqlalchemy.User:
         email (str): The email of the user
 
     Returns:
-        sqlalchemy.User: The given user
+        User: The given user
     """
-    return db.query(sqlalchemy.User).filter(sqlalchemy.User.email == email).first()
+    return db.query(User).filter(User.email == email).first()
 
-def get_user_by_username(db: Session, username: str) -> sqlalchemy.User:
+def get_user_by_username(db: Session, username: str) -> User:
     """Get a user by username
 
     Args:
@@ -34,9 +35,9 @@ def get_user_by_username(db: Session, username: str) -> sqlalchemy.User:
         email (str): The username of the user
 
     Returns:
-        sqlalchemy.User: The given user
+        User: The given user
     """
-    return db.query(sqlalchemy.User).filter(sqlalchemy.User.username == username).first()
+    return db.query(User).filter(User.username == username).first()
 
 def get_users(db: Session, skip: int = 0, limit: int = 100) -> list:
     """Get a list of users
@@ -49,37 +50,37 @@ def get_users(db: Session, skip: int = 0, limit: int = 100) -> list:
     Returns:
         list: A list of users
     """
-    return db.query(sqlalchemy.User).offset(skip).limit(limit).all()
+    return db.query(User).offset(skip).limit(limit).all()
 
-def create_user(db: Session, user: pydantic.UserCreate) -> sqlalchemy.User:
+def create_user(db: Session, user: PUserCreate) -> User:
     """Create a new user
 
     Args:
         db (Session): The sqlalchemy session
-        user (pydantic.UserCreate): The user to create
+        user (PUserCreate): The user to create
 
     Returns:
-        sqlalchemy.User: The created user
+        User: The created user
     """
     hashed_password = user.password + "notreallyhashed" #TODO: actually hash the password
-    db_user = sqlalchemy.User(firstname=user.firstname, lastname=user.lastname, username=user.username, email=user.email, password=hashed_password, profile_picture=user.profile_picture, favorite_genres=user.favorite_genres)
+    db_user = User(firstname=user.firstname, lastname=user.lastname, username=user.username, email=user.email, password=hashed_password, profile_picture=user.profile_picture, favorite_genres=user.favorite_genres)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
 
-def edit_user(db: Session, user_id: int, user: pydantic.UserCreate) -> sqlalchemy.User:
+def edit_user(db: Session, user_id: int, user: PUserCreate) -> User:
     """Edit a user
 
     Args:
         db (Session): The sqlalchemy session
         user_id (int): The id of the user to edit
-        user (pydantic.UserEdit): The user to edit
+        user (PUserEdit): The user to edit
 
     Returns:
-        sqlalchemy.User: The edited user
+        User: The edited user
     """
-    db_user = db.query(sqlalchemy.User).filter(sqlalchemy.User.id == user_id).first()
+    db_user = db.query(User).filter(User.id == user_id).first()
     if user.firstname:
         db_user.firstname = user.firstname
     if user.lastname:
@@ -98,19 +99,19 @@ def edit_user(db: Session, user_id: int, user: pydantic.UserCreate) -> sqlalchem
     db.refresh(db_user)
     return db_user
 
-def delete_user(db: Session, user_id: int) -> sqlalchemy.User:
+def delete_user(db: Session, user_id: int) -> User:
     """Delete a user
 
     Args:
         db (Session): The sqlalchemy session
         user_id (int): The id of the user to delete
     """
-    db_user = db.query(sqlalchemy.User).filter(sqlalchemy.User.id == user_id).first()
+    db_user = db.query(User).filter(User.id == user_id).first()
     db.delete(db_user)
     db.commit()
     return db_user
 
-def login_user(db: Session, email: str, password: str) -> sqlalchemy.User:
+def login_user(db: Session, email: str, password: str) -> User:
     """Login a user
 
     Args:
@@ -119,9 +120,9 @@ def login_user(db: Session, email: str, password: str) -> sqlalchemy.User:
         password (str): The password of the user
 
     Returns:
-        sqlalchemy.User: The logged in user
+        User: The logged in user
     """
-    db_user = db.query(sqlalchemy.User).filter(sqlalchemy.User.email == email).first()
+    db_user = db.query(User).filter(User.email == email).first()
     if db_user:
         if db_user.password == password + "notreallyhashed": #TODO: actually hash the password
             return db_user
