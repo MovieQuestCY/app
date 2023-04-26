@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, List
+from typing import Optional
 from pydantic import BaseModel
 
 class UserBase(BaseModel):
@@ -32,17 +32,3 @@ class UserLogged(User):
     """The user model for returning a user after creation"""
     token: str
 
-class TeamBase(BaseModel):
-    """The base team model"""
-    name: str
-
-class TeamCreate(TeamBase):
-    pass
-
-class Team(TeamBase):
-    """The team model for returning a team"""
-    id: int
-
-    class Config:
-        """The config for the team model"""
-        orm_mode = True

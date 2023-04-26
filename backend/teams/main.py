@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import movies
+from .routes import teams
 
 app = FastAPI(
-    title="Movie API",
-    description="API for movies management",
+    title="teams API",
+    description="API for users management",
     version="0.1.0",
     contact={
         "name": "MovieQuest",
@@ -23,8 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-app.include_router(movies.movie_router)
+app.include_router(teams.teams_router)
 
 @app.get("/")
 def read_root():

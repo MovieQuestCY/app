@@ -1,7 +1,7 @@
-from moviequesttypes import User, PUserCreate
+from bdd.schemas import pydantic
+from moviequesttypes import User, PUser, PUserCreate
+from moviequesttypes import Movie
 from sqlalchemy.orm import Session
-import jwt
-from datetime import datetime, timedelta
 
 def get_user(db: Session, user_id: int) -> User:
     """Get a user by id
@@ -75,7 +75,7 @@ def edit_user(db: Session, user_id: int, user: PUserCreate) -> User:
     Args:
         db (Session): The sqlalchemy session
         user_id (int): The id of the user to edit
-        user (UserEdit): The user to edit
+        user (PUserEdit): The user to edit
 
     Returns:
         User: The edited user
@@ -110,25 +110,6 @@ def delete_user(db: Session, user_id: int) -> User:
     db.delete(db_user)
     db.commit()
     return db_user
-
-
-def create_jwt_token(secret: str, algorithm: str, user: User) -> str:
-    """Create a jwt token
-
-    Args:
-        secret (str): The secret to use
-        algorithm (str): The algorithm to use
-        user (sqlalchemy_schemas.User): The user to create the token for
-
-    Returns:
-        str: The jwt token
-    """
-    
-    expiration = datetime.utcnow() + timedelta(days=14)
-    to_encode = {"exp": expiration, "sub": str(user.id)}
-    encoded_jwt = jwt.encode(to_encode, secret, algorithm=algorithm)
-    return encoded_jwt
-
 
 def login_user(db: Session, email: str, password: str) -> User:
     """Login a user

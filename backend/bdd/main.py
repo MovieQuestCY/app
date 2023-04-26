@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import movies
+from .db import engine
+from .schemas.sqlalchemy import schemas
+
+schemas.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Movie API",
-    description="API for movies management",
+    title="BDD Builder API",
+    description="API for building BDD",
     version="0.1.0",
     contact={
         "name": "MovieQuest",
@@ -23,9 +26,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-app.include_router(movies.movie_router)
-
 @app.get("/")
-def read_root():
-    return {"Hello": "Welcome to our API"}
+def build_bdd():
+    return {'200': 'OK'}

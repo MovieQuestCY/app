@@ -3,7 +3,7 @@ from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
 from ..controllers.teams import create_team, get_team, get_teams, add_user_to_team, get_team_by_name, remove_user_from_team, delete_team, edit_team, get_users_from_team
 from ..controllers.users import get_user
-from ..models.pydantic_schemas import Team, TeamCreate, User
+from moviequesttypes import PTeam, PTeamCreate, PUser
 from ..db import SessionLocal
 
 teams_router = APIRouter(prefix="/teams")
@@ -17,8 +17,8 @@ def get_db() -> Session:
     finally:
         db.close()
 
-@teams_router.post("/", response_model=Team)
-def create_team_route(team: TeamCreate, db: Session = Depends(get_db)) -> Team:
+@teams_router.post("/", response_model=PTeam)
+def create_team_route(team: PTeamCreate, db: Session = Depends(get_db)) -> PTeam:
     """The endpoint for creating a new team
 
     Args:
@@ -36,8 +36,8 @@ def create_team_route(team: TeamCreate, db: Session = Depends(get_db)) -> Team:
         raise HTTPException(status_code=400, detail="Team with this name already exists")
     return create_team(db=db, team=team)
 
-@teams_router.get("/{team_id}", response_model=Team)
-def read_team_route(team_id: int, db: Session = Depends(get_db)) -> Team:
+@teams_router.get("/{team_id}", response_model=PTeam)
+def read_team_route(team_id: int, db: Session = Depends(get_db)) -> PTeam:
     """The endpoint for getting a team by id
 
     Args:
@@ -55,8 +55,8 @@ def read_team_route(team_id: int, db: Session = Depends(get_db)) -> Team:
         raise HTTPException(status_code=404, detail="Team not found")
     return db_team
 
-@teams_router.get("/", response_model=List[Team])
-def read_teams_route(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> List[Team]:
+@teams_router.get("/", response_model=List[PTeam])
+def read_teams_route(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> List[PTeam]:
     """The endpoint for getting a list of teams
 
     Args:
@@ -71,7 +71,7 @@ def read_teams_route(skip: int = 0, limit: int = 100, db: Session = Depends(get_
     return teams
 
 @teams_router.post("/{team_id}/add_user/{user_id}")
-def add_user_to_team_route(team_id: int, user_id: int, db: Session = Depends(get_db)) -> User:
+def add_user_to_team_route(team_id: int, user_id: int, db: Session = Depends(get_db)) -> PUser:
     """The endpoint for adding a user to a team
 
     Args:
@@ -83,7 +83,7 @@ def add_user_to_team_route(team_id: int, user_id: int, db: Session = Depends(get
         HTTPException: If the user or team does not exist
 
     Returns:
-        sqlalchemy_schemas.User: The user with the given id
+        sqlalchemy.User: The user with the given id
     """
     db_user = get_user(db, user_id=user_id)
     db_team = get_team(db, team_id=team_id)
@@ -93,8 +93,8 @@ def add_user_to_team_route(team_id: int, user_id: int, db: Session = Depends(get
         raise HTTPException(status_code=404, detail="Team not found")
     return add_user_to_team(db=db, user=db_user, team=db_team)
     
-@teams_router.get("/by_name/{name}", response_model=Team)
-def get_team_by_name_route(name: str, db: Session = Depends(get_db)) -> Team:
+@teams_router.get("/by_name/{name}", response_model=PTeam)
+def get_team_by_name_route(name: str, db: Session = Depends(get_db)) -> PTeam:
     """The endpoint for getting a team by name
 
     Args:
@@ -113,7 +113,7 @@ def get_team_by_name_route(name: str, db: Session = Depends(get_db)) -> Team:
     return db_team
 
 @teams_router.delete("/{team_id}/remove_user/{user_id}")
-def remove_user_from_team_route(team_id: int, user_id: int, db: Session = Depends(get_db)) -> User:
+def remove_user_from_team_route(team_id: int, user_id: int, db: Session = Depends(get_db)) -> PUser:
     """The endpoint for removing a user from a team
 
     Args:
@@ -125,7 +125,7 @@ def remove_user_from_team_route(team_id: int, user_id: int, db: Session = Depend
         HTTPException: If the user or team does not exist
 
     Returns:
-        sqlalchemy_schemas.User: The user with the given id
+        sqlalchemy.User: The user with the given id
     """
     db_user = get_user(db, user_id=user_id)
     db_team = get_team(db, team_id=team_id)
@@ -136,7 +136,7 @@ def remove_user_from_team_route(team_id: int, user_id: int, db: Session = Depend
     return remove_user_from_team(db=db, user=db_user, team=db_team)
 
 @teams_router.delete("/{team_id}")
-def delete_team_route(team_id: int, db: Session = Depends(get_db)) -> Team:
+def delete_team_route(team_id: int, db: Session = Depends(get_db)) -> PTeam:
     """The endpoint for deleting a team
 
     Args:
@@ -155,7 +155,7 @@ def delete_team_route(team_id: int, db: Session = Depends(get_db)) -> Team:
     return delete_team(db=db, team_id=team_id)
 
 @teams_router.put("/{team_id}")
-def edit_team_route(team_id: int, edited_team: TeamCreate, db: Session = Depends(get_db)) -> Team:
+def edit_team_route(team_id: int, edited_team: PTeamCreate, db: Session = Depends(get_db)) -> PTeam:
     """The endpoint for editing a team
 
     Args:
@@ -179,8 +179,8 @@ def edit_team_route(team_id: int, edited_team: TeamCreate, db: Session = Depends
         raise HTTPException(status_code=400, detail="Team name cannot be empty")
     return edit_team(db=db, team=db_team, new_name=edited_team.name)
 
-@teams_router.get("/{team_id}/users", response_model=List[User])
-def get_users_in_team_route(team_id: int, db: Session = Depends(get_db)) -> List[User]:
+@teams_router.get("/{team_id}/users", response_model=List[PUser])
+def get_users_in_team_route(team_id: int, db: Session = Depends(get_db)) -> List[PUser]:
     """The endpoint for getting the users in a team
 
     Args:

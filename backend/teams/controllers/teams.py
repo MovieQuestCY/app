@@ -1,8 +1,8 @@
-from ..models import sqlalchemy_schemas, pydantic_schemas
-from ..controllers.users import get_user 
+from bdd.schemas import pydantic
+from moviequesttypes import Team, User, PTeam, PTeamCreate, PUser
 from sqlalchemy.orm import Session
 
-def get_team(db: Session, team_id: int) -> sqlalchemy_schemas.Team:
+def get_team(db: Session, team_id: int) -> Team:
     """Get a team by id
 
     Args:
@@ -10,9 +10,9 @@ def get_team(db: Session, team_id: int) -> sqlalchemy_schemas.Team:
         team_id (int): The id of the team
 
     Returns:
-        sqlalchemy_schemas.Team: The team with the given id
+        Team: The team with the given id
     """
-    return db.query(sqlalchemy_schemas.Team).filter(sqlalchemy_schemas.Team.id == team_id).first()
+    return db.query(Team).filter(Team.id == team_id).first()
 
 def get_teams(db: Session, skip: int = 0, limit: int = 100) -> list:
     """Get a list of teams
@@ -25,9 +25,9 @@ def get_teams(db: Session, skip: int = 0, limit: int = 100) -> list:
     Returns:
         list: A list of teams
     """
-    return db.query(sqlalchemy_schemas.Team).offset(skip).limit(limit).all()
+    return db.query(Team).offset(skip).limit(limit).all()
 
-def get_team_by_name(db: Session, name: str) -> sqlalchemy_schemas.Team:
+def get_team_by_name(db: Session, name: str) -> Team:
     """Get a team by name
 
     Args:
@@ -35,27 +35,27 @@ def get_team_by_name(db: Session, name: str) -> sqlalchemy_schemas.Team:
         name (str): The name of the team
 
     Returns:
-        sqlalchemy_schemas.Team: The team with the given name
+        Team: The team with the given name
     """
-    return db.query(sqlalchemy_schemas.Team).filter(sqlalchemy_schemas.Team.name == name).first()
+    return db.query(Team).filter(Team.name == name).first()
 
-def create_team(db: Session, team: pydantic_schemas.TeamCreate) -> sqlalchemy_schemas.Team:
+def create_team(db: Session, team: PTeamCreate) -> Team:
     """Create a new team
 
     Args:
         db (Session): The sqlalchemy session
-        team (pydantic_schemas.TeamCreate): The team to create
+        team (PTeamCreate): The team to create
 
     Returns:
-        sqlalchemy_schemas.Team: The created team
+        Team: The created team
     """
-    db_team = sqlalchemy_schemas.Team(name=team.name)
+    db_team = Team(name=team.name)
     db.add(db_team)
     db.commit()
     db.refresh(db_team)
     return db_team
 
-def add_user_to_team(db: Session, user: sqlalchemy_schemas.User, team: sqlalchemy_schemas.Team) -> sqlalchemy_schemas.User:
+def add_user_to_team(db: Session, user: User, team: Team) -> User:
     """Add a user to a team
 
     Args:
@@ -64,14 +64,14 @@ def add_user_to_team(db: Session, user: sqlalchemy_schemas.User, team: sqlalchem
         team_id (int): The id of the team
 
     Returns:
-        sqlalchemy_schemas.User: The user with the added team
+        User: The user with the added team
     """
     user.teams.append(team)
     db.commit()
     db.refresh(user)
     return user
 
-def remove_user_from_team(db: Session, user: pydantic_schemas.User, team: pydantic_schemas.Team) -> sqlalchemy_schemas.User:
+def remove_user_from_team(db: Session, user: PUser, team: PTeam) -> User:
     """Remove a user from a team
 
     Args:
@@ -80,7 +80,7 @@ def remove_user_from_team(db: Session, user: pydantic_schemas.User, team: pydant
         team_id (int): The id of the team where the user is deleted
 
     Returns:
-        sqlalchemy_schemas.User: The removed user
+        User: The removed user
     """
     db_user = user
     db_team = team
@@ -89,7 +89,7 @@ def remove_user_from_team(db: Session, user: pydantic_schemas.User, team: pydant
     db.refresh(db_user)
     return db_user
 
-def delete_team(db: Session, team_id: int) -> sqlalchemy_schemas.Team:
+def delete_team(db: Session, team_id: int) -> Team:
     """Delete a team
 
     Args:
@@ -97,23 +97,23 @@ def delete_team(db: Session, team_id: int) -> sqlalchemy_schemas.Team:
         team_id (int): The id of the team to delete
 
     Returns:
-        sqlalchemy_schemas.Team: The deleted team
+        Team: The deleted team
     """
     db_team = get_team(db, team_id=team_id)
     db.delete(db_team)
     db.commit()
     return db_team
 
-def edit_team(db: Session, team: pydantic_schemas.Team, new_name:str) -> sqlalchemy_schemas.Team:
+def edit_team(db: Session, team: PTeam, new_name:str) -> Team:
     """Edit a team
 
     Args:
         db (Session): The sqlalchemy session
         team_id (int): The id of the team to edit
-        team (pydantic_schemas.TeamCreate): The new team
+        team (PTeamCreate): The new team
 
     Returns:
-        sqlalchemy_schemas.Team: The edited team
+        Team: The edited team
     """
     team.name = new_name
     db.commit()
@@ -131,4 +131,4 @@ def get_users_from_team(db: Session, team_id: int) -> list:
         list: A list of users
     """
     #db_team = get_team(db, team_id=team_id)
-    return db.query(sqlalchemy_schemas.User).filter(sqlalchemy_schemas.User.teams.any(id=team_id)).all()
+    return db.query(User).filter(User.teams.any(id=team_id)).all()
