@@ -47,8 +47,7 @@ services:
     container_name: users
     build: ./backend
     depends_on:
-      mysql:
-        condition: service_healthy
+      - db
     command: uvicorn users.main:app --reload --workers 1 --host 0.0.0.0 --port 80
     volumes:
       - ./backend/users:/usr/src/users
@@ -73,8 +72,7 @@ services:
     container_name: movies
     build: ./backend
     depends_on:
-      mysql:
-        condition: service_healthy
+      - db
     command: uvicorn movies.main:app --reload --workers 1 --host 0.0.0.0 --port 80
     volumes:
       - ./backend/movies:/usr/src/movies
@@ -92,6 +90,44 @@ services:
       - "traefik.http.routers.movies.service=movies"
       - "traefik.http.services.movies.loadbalancer.server.port=80"
       - "traefik.http.routers.movies.middlewares=my-jwt-validation-middleware@file"
+  teams:
+    container_name: teams
+    build: ./backend
+    depends_on:
+      - db
+    command: uvicorn teams.main:app --reload --workers 1 --host 0.0.0.0 --port 80
+    volumes:
+      - ./backend/teams:/usr/src/teams
+    expose:
+      - 80
+    ports:
+      - 8006:80
+    environment:
+      - ENVIRONMENT=dev
+      - TESTING=0
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.teams.entrypoints=web"
+      - "traefik.http.routers.teams.rule=Host(`teams.dev.neuvy.eu`)"
+      - "traefik.http.routers.teams.service=teams"
+      - "traefik.http.services.teams.loadbalancer.server.port=80"
+      - "traefik.http.routers.teams.middlewares=my-jwt-validation-middleware@file"
+  db:
+    container_name: fastapi_db
+    build: ./backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: uvicorn bdd.main:app --reload --workers 1 --host 0.0.0.0 --port 80
+    volumes:
+      - ./backend/bdd:/usr/src/bdd
+    expose:
+      - 80
+    ports:
+      - 8007:80
+    environment:
+      - ENVIRONMENT=dev
+      - TESTING=0
 
   mysql:
     container_name: mysql

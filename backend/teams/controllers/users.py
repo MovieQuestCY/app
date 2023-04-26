@@ -1,4 +1,3 @@
-from bdd.schemas import pydantic
 from moviequesttypes import User, PUser, PUserCreate
 from moviequesttypes import Movie
 from sqlalchemy.orm import Session

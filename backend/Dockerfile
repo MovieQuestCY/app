@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.9.16-slim
 
 WORKDIR /usr/src/
 
@@ -16,4 +16,4 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 COPY ./moviequesttypes ./moviequesttypes
-RUN pip install /usr/src/moviequesttypes
+RUN pip install -e /usr/src/moviequesttypes

@@ -1,4 +1,3 @@
-from bdd.schemas import pydantic
 from moviequesttypes import Team, User, PTeam, PTeamCreate, PUser
 from sqlalchemy.orm import Session
 
