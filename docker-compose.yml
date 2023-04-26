@@ -52,6 +52,7 @@ services:
     command: uvicorn users.main:app --reload --workers 1 --host 0.0.0.0 --port 80
     volumes:
       - ./backend/users:/usr/src/users
+      - ./backend/bdd:/usr/src/bdd
     expose:
       - 80
     ports:
@@ -62,9 +63,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.users.entrypoints=web"
-      - "traefik.http.routers.users.rule=Host(`users.dev.neuvy.eu`)"
+      - "traefik.http.routers.users.rule=Host(`users.dev.neuvy.eu`) && (PathPrefix(`/`) && !Path(`/users/login`))"
       - "traefik.http.routers.users.service=users"
+      - "traefik.http.routers.users.middlewares=my-jwt-validation-middleware@file"
       - "traefik.http.services.users.loadbalancer.server.port=80"
+      - "traefik.http.routers.login.rule=Host(`users.dev.neuvy.eu`) && Path(`/users/login`)"
+      - "traefik.http.routers.login.service=users"
   movies:
     container_name: movies
     build: ./backend
