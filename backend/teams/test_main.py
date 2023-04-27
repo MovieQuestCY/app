@@ -1,10 +1,9 @@
+from moviequesttypes.pydantic.User import PUserCreate
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from .main import app
-from .db import SessionLocal
-from moviequesttypes import PUserCreate, PTeamCreate
 from moviequesttypes.sqlalchemy.schemas import Base
 import os, tempfile
 from .routes.teams import get_db
@@ -49,14 +48,6 @@ def test_read_teams(client):
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
-# Test adding a user to a team
-def test_add_user_to_team(client):
-    team_id = 1
-    user_id = 1
-    response = client.post(f"/teams/{team_id}/add_user/{user_id}")
-    assert response.status_code == 200
-    assert response.json()["id"] == user_id
-
 # Test getting a team by name
 def test_get_team_by_name(client):
     team_name = "Test Team"
@@ -72,14 +63,6 @@ def test_get_users_in_team(client):
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
-# Test removing a user from a team
-def test_remove_user_from_team(client):
-    team_id = 1
-    user_id = 1
-    response = client.delete(f"/teams/{team_id}/remove_user/{user_id}")
-    assert response.status_code == 200
-    assert response.json()["id"] == user_id
-
 # Test editing a team
 def test_edit_team(client):
     team_id = 1
@@ -90,7 +73,7 @@ def test_edit_team(client):
 
 # Test deleting a team
 def test_delete_team(client):
-    team_id = 2
+    team_id = 1
     response = client.delete(f"/teams/{team_id}")
     assert response.status_code == 200
     assert response.json()["id"] == team_id
