@@ -3,9 +3,17 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from ..main import app
-from ..db import Base
+from ..db import Base, SessionLocal
 from ..controllers.users import create_user, get_user_by_email
 from moviequesttypes import PUserCreate
+
+def get_db():
+    """Get a database session"""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # Create a test database and a test client
 DATABASE_URL = "sqlite:///./test.db"
