@@ -1,5 +1,4 @@
-from moviequesttypes import User, PUser, PUserCreate
-from moviequesttypes import Movie
+from moviequesttypes import User, PUserCreate
 from sqlalchemy.orm import Session
 
 def get_user(db: Session, user_id: int) -> User:
