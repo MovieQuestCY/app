@@ -3,9 +3,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from .main import app
-from .db import SessionLocal
-from moviequesttypes import PUserCreate, PTeamCreate
 from moviequesttypes.sqlalchemy.schemas import Base
+from moviequesttypes.pydantic.Movie import PMovieCreate
 import os, tempfile
 from .routes.movies import get_db
 
@@ -30,10 +29,10 @@ def client():
 
 # Test creating a new movie
 def test_create_movie(client):
-    new_movie = {"title": "Test Movie", "director": "Test Director"}
-    response = client.post("/movies/", json=new_movie)
+    new_movie = PMovieCreate(id=1, title="Test Movie", overview="", release_date="", genres="", vote_average=0.0, popularity=0, poster_path="")
+    response = client.post("/movies/", json=new_movie.dict())
     assert response.status_code == 200
-    assert response.json()["title"] == new_movie["title"]
+    assert response.json()["title"] == "Test Movie"
 
 # Test getting a movie by id
 def test_read_movie(client):
@@ -58,11 +57,10 @@ def test_read_movie_by_title(client):
 # Test editing a movie
 def test_edit_movie(client):
     movie_id = 1
-    edited_movie = {"title": "Updated Test Movie", "director": "Updated Test Director"}
+    edited_movie = PMovieCreate(id=1, title="Updated title Test Movie", overview="", release_date="", genres="", vote_average=0.0, popularity=0, poster_path="")
     response = client.put(f"/movies/{movie_id}", json=edited_movie)
     assert response.status_code == 200
     assert response.json()["title"] == edited_movie["title"]
-    assert response.json()["director"] == edited_movie["director"]
 
 # Test deleting a movie
 def test_delete_movie(client):
