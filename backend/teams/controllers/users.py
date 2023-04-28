@@ -1,5 +1,4 @@
-from moviequesttypes import User, PUser, PUserCreate
-from moviequesttypes import Movie
+from moviequesttypes import User, PUserCreate
 from sqlalchemy.orm import Session
 
 def get_user(db: Session, user_id: int) -> User:
@@ -61,8 +60,7 @@ def create_user(db: Session, user: PUserCreate) -> User:
     Returns:
         User: The created user
     """
-    hashed_password = user.password + "notreallyhashed" #TODO: actually hash the password
-    db_user = User(firstname=user.firstname, lastname=user.lastname, username=user.username, email=user.email, password=hashed_password, profile_picture=user.profile_picture, favorite_genres=user.favorite_genres)
+    db_user = User(firstname=user.firstname, lastname=user.lastname, username=user.username, email=user.email, password=user.password, profile_picture=user.profile_picture, favorite_genres=user.favorite_genres)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -89,7 +87,7 @@ def edit_user(db: Session, user_id: int, user: PUserCreate) -> User:
     if user.email:
         db_user.email = user.email
     if user.password:
-        db_user.password = user.password + "notreallyhashed" #TODO: actually hash the password
+        db_user.password = user.password
     if user.profile_picture:
         db_user.profile_picture = user.profile_picture
     if user.favorite_genres:
@@ -123,6 +121,6 @@ def login_user(db: Session, email: str, password: str) -> User:
     """
     db_user = db.query(User).filter(User.email == email).first()
     if db_user:
-        if db_user.password == password + "notreallyhashed": #TODO: actually hash the password
+        if db_user.password == password:
             return db_user
     return None

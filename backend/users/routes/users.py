@@ -33,7 +33,7 @@ def create_user_route(user: PUserCreate, db: Session = Depends(get_db)) -> PUser
     """
     db_user = get_user_by_email(db, email=user.email)
     if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=409, detail="Email already registered")
     return create_user(db=db, user=user)
 
 @user_router.get("/{user_id}", response_model=PUser)
