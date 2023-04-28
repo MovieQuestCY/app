@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from .main import app
 from moviequesttypes.sqlalchemy.schemas import Base
-from moviequesttypes.pydantic.Movie import PMovieCreate
+from moviequesttypes import PMovieCreate, PMovie
 import os, tempfile
 from .routes.movies import get_db
 
@@ -29,14 +29,14 @@ def client():
 
 # Test creating a new movie
 def test_create_movie(client):
-    new_movie = PMovieCreate(id=1, title="Test Movie", overview="", release_date="", genres="", vote_average=0.0, popularity=0, poster_path="")
-    response = client.post("/movies/", json=new_movie.dict())
+    movie = PMovieCreate(id=64, title="Test Movie", overview="", release_date="", genres="", vote_average=0.0, popularity=0, poster_path="")
+    response = client.post("/movies/", json=movie.dict())
     assert response.status_code == 200
     assert response.json()["title"] == "Test Movie"
 
 # Test getting a movie by id
 def test_read_movie(client):
-    movie_id = 1
+    movie_id = 64
     response = client.get(f"/movies/{movie_id}")
     assert response.status_code == 200
     assert response.json()["id"] == movie_id
@@ -56,15 +56,15 @@ def test_read_movie_by_title(client):
 
 # Test editing a movie
 def test_edit_movie(client):
-    movie_id = 1
-    edited_movie = PMovieCreate(id=1, title="Updated title Test Movie", overview="", release_date="", genres="", vote_average=0.0, popularity=0, poster_path="")
-    response = client.put(f"/movies/{movie_id}", json=edited_movie)
+    movie_id = 64
+    edited_movie = PMovieCreate(id=64, title="Updated title Test Movie", overview="", release_date="", genres="", vote_average=0.0, popularity=0, poster_path="")
+    response = client.put(f"/movies/{movie_id}", json=edited_movie.dict())
     assert response.status_code == 200
-    assert response.json()["title"] == edited_movie["title"]
+    assert response.json()["title"] == "Updated title Test Movie"
 
 # Test deleting a movie
 def test_delete_movie(client):
-    movie_id = 2
+    movie_id = 64
     response = client.delete(f"/movies/{movie_id}")
     assert response.status_code == 200
     assert response.json()["id"] == movie_id

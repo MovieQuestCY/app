@@ -19,10 +19,10 @@ def get_db():
 #TODO : Find another point to check if the movie already exists
 @movie_router.post("/", response_model=PMovie)
 def create_movie_route(movie: PMovieCreate, db: Session = Depends(get_db)) -> PMovie:
-    db_movie = get_movie_by_title(db, title=PMovie.title)
+    db_movie = get_movie_by_title(db, title=movie.title)
     if db_movie:
         raise HTTPException(status_code=400, detail="Title already registered")
-    return create_movie(db=db, movie=PMovie)
+    return create_movie(db=db, movie=movie)
 
 @movie_router.get("/{movie_id}", response_model=PMovie)
 def read_movie_route(movie_id: int, db: Session = Depends(get_db)) -> PMovie:
@@ -43,6 +43,13 @@ def read_movie_by_title_route(title: str, db: Session = Depends(get_db)) -> PMov
         raise HTTPException(status_code=404, detail="Movie not found")
     return db_movie
 
+@movie_router.put("/{movie_id}", response_model=PMovie)
+def edit_movie_route(movie_id: int, movie: PMovieCreate, db: Session = Depends(get_db)) -> PMovie:
+    db_movie = get_movie(db, movie_id=movie_id)
+    if db_movie is None:
+        raise HTTPException(status_code=404, detail="Movie not found")
+    return edit_movie(db, movie_id=movie_id, movie=movie)
+
 @movie_router.delete("/{movie_id}", response_model=PMovie)
 def delete_movie_route(movie_id: int, db: Session = Depends(get_db)) -> PMovie:
     db_movie = get_movie(db, movie_id=movie_id)
@@ -50,12 +57,6 @@ def delete_movie_route(movie_id: int, db: Session = Depends(get_db)) -> PMovie:
         raise HTTPException(status_code=404, detail="Movie not found")
     return delete_movie(db, movie_id=movie_id)
 
-@movie_router.put("/{movie_id}", response_model=PMovie)
-def edit_movie_route(movie_id: int, movie: PMovieCreate, db: Session = Depends(get_db)) -> PMovie:
-    db_movie = get_movie(db, movie_id=movie_id)
-    if db_movie is None:
-        raise HTTPException(status_code=404, detail="Movie not found")
-    return edit_movie(db, movie_id=movie_id, movie=movie)
 
 
 
