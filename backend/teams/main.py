@@ -13,7 +13,7 @@ app = FastAPI(
 )
 
 origins = [
-    "https://front.dev.neuvy.eu",
+    "http://front.dev.neuvy.eu",
     "https://moviequest.neuvy.eu"
 ]
 app.add_middleware(
