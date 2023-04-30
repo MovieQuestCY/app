@@ -2,7 +2,7 @@ name: build-deploy-bdd-api
 on:
   push:
     paths:
-    - 'backend/users/**'
+    - 'backend/bdd/**'
   workflow_dispatch:
 jobs:
   docker:

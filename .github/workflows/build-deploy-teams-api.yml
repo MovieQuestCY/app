@@ -2,7 +2,7 @@ name: build-deploy-teams-api
 on:
   push:
     paths:
-    - 'backend/users/**'
+    - 'backend/teams/**'
   workflow_dispatch:
 jobs:
   docker:

@@ -2,7 +2,7 @@ name: build-deploy-movies-api
 on:
   push:
     paths:
-    - 'backend/users/**'
+    - 'backend/movies/**'
   workflow_dispatch:
 jobs:
   docker:
