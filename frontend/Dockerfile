@@ -2,11 +2,11 @@
 FROM node:current-alpine3.16 as develop-stage
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install && npm install vue-cookies
 COPY . .
-RUN --mount=type=secret,id=TMDB_API_KEY \
-    echo 'export const tmdbToken = "$(cat /run/secrets/TMDB_API_KEY)"' > ./src/secrets/index.ts && \
-    cat ./src/secrets/index.ts
+COPY write_secret.sh ./
+RUN chmod +x write_secret.sh
+RUN --mount=type=secret,id=TMDB_API_KEY ./write_secret.sh
 
 #build stage
 FROM develop-stage as build-stage
