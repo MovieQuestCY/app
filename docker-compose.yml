@@ -64,12 +64,14 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.users.entrypoints=web"
-      - "traefik.http.routers.users.rule=Host(`users.dev.neuvy.eu`) && (PathPrefix(`/`) && !Path(`/users/login`))"
+      - "traefik.http.routers.users.rule=Host(`users.dev.neuvy.eu`)"
       - "traefik.http.routers.users.service=users"
       - "traefik.http.routers.users.middlewares=my-jwt-validation-middleware@file"
       - "traefik.http.services.users.loadbalancer.server.port=80"
       - "traefik.http.routers.login.rule=Host(`users.dev.neuvy.eu`) && Path(`/users/login`)"
       - "traefik.http.routers.login.service=users"
+      - "traefik.http.routers.register.rule=Host(`users.dev.neuvy.eu`) && Path(`/users/`) && Method(`POST`)"
+      - "traefik.http.routers.register.service=users"
   movies:
     container_name: movies
     build: ./backend
@@ -114,6 +116,11 @@ services:
       - "traefik.http.routers.teams.service=teams"
       - "traefik.http.services.teams.loadbalancer.server.port=80"
       - "traefik.http.routers.teams.middlewares=my-jwt-validation-middleware@file"
+      - "traefik.http.routers.readteams.rule=Host(`teams.dev.neuvy.eu`) && Path(`/teams/`)"
+      - "traefik.http.routers.readteams.service=teams"
+      - "traefik.http.routers.addusertoteam.rule=Host(`teams.dev.neuvy.eu`) && PathPrefix(`/teams/{team_id}/add_user/{user_id}`)"
+      - "traefik.http.routers.addusertoteam.service=teams"
+      
   db:
     container_name: fastapi_db
     build: ./backend
