@@ -1,7 +1,10 @@
-# app
+# Live demo
 
-source vevn/bin/activate
-pip install -r requirements.txt
+A fully operational live demo is available at : https://moviequest.neuvy.eu
+
+# Project architecture
+
+
 
 # Setup dev environment
 
