@@ -6,6 +6,7 @@ class PTeamBase(BaseModel):
     name: str
 
 class PTeamCreate(PTeamBase):
+    user_id: int
     pass
 
 class PTeam(PTeamBase):

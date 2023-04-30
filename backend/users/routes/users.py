@@ -125,7 +125,7 @@ def delete_user_route(user_id: int, db: Session = Depends(get_db)) -> PUser:
     return delete_user(db, user_id=user_id)
 
 @user_router.put("/{user_id}", response_model=PUser)
-def edit_user_route(user_id: int, user: PUserCreate, db: Session = Depends(get_db)) -> PUser:
+def edit_user_route(user_id: int, user: PUser, db: Session = Depends(get_db)) -> PUser:
     """The endpoint for editing a user
 
     Args:

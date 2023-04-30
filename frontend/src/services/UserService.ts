@@ -1,4 +1,4 @@
-import { User, UserCreation } from "../models/types";
+import { Team, User, UserCreation } from "../models/types";
 
 class UserService {
     private userApiUrl = import.meta.env.VITE_APP_USERS_API_URL;
@@ -12,7 +12,7 @@ class UserService {
     }
 
     async getUser(id: number): Promise<User> {
-        const response = await fetch(`${this.userApiUrl}/${id}/`);
+        const response = await fetch(`${this.userApiUrl}${id}/`);
         const user = await response.json();
         return user;
     }
@@ -22,6 +22,20 @@ class UserService {
         const users = await response.json() as User[];
         return users;
     }
+
+    async editUser(user: User): Promise<User> {
+        const response = await fetch(`${this.userApiUrl}${user.id}/`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+        });
+        const editedUser = await response.json();
+        return editedUser;
+    }
+
+    
 
     async register(user: UserCreation): Promise<User> {
         const response = await fetch(this.userApiUrl, {

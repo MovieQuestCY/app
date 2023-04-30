@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import List, Optional
-from sqlalchemy import String, Integer, Float, Table, ForeignKey, Column
+from sqlalchemy import String, Integer, Float, Table, ForeignKey, Column, Text, BigInteger
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
 
 class Base(DeclarativeBase):
@@ -18,14 +18,14 @@ class Movie(Base):
     """The sqlalchemy movie model, used to create the database 'movies' table"""
     __tablename__ = "movies"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     title: Mapped[str] = mapped_column(String(250))
-    overview: Mapped[str] = mapped_column(String(250))
+    overview: Mapped[str] = mapped_column(Text)
     release_date: Mapped[str] = mapped_column(String(250))
     genres: Mapped[str] = mapped_column(String(250))
     vote_average: Mapped[float] = mapped_column(Float)
     popularity: Mapped[int] = mapped_column(Integer)
-    poster_path: Mapped[str] = mapped_column(String(250))
+    poster_path: Mapped[Optional[str]] = mapped_column(String(250))
     users: Mapped[Optional[List[User]]] = relationship("User", secondary=has_watched, back_populates="movies")
 
     def __str__(self) -> str:

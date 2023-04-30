@@ -86,10 +86,6 @@ def edit_user(db: Session, user_id: int, user: PUserCreate) -> User:
         db_user.lastname = user.lastname
     if user.username:
         db_user.username = user.username
-    if user.email:
-        db_user.email = user.email
-    if user.password:
-        db_user.password = user.password
     if user.profile_picture:
         db_user.profile_picture = user.profile_picture
     if user.favorite_genres:

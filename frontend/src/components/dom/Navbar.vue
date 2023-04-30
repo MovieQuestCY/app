@@ -14,7 +14,7 @@
                 <hr class="w-[1px] h-6 bg-gray-50" />
             </li>
             <li v-if="authStore.isAuth">
-                <router-link to="/dashboard" class="hover:text-red-500 transition-all duration-300">Dashboard</router-link>
+                <router-link to="/dashboard/profile" class="hover:text-red-500 transition-all duration-300">Dashboard</router-link>
             </li>
             <li v-else>
                 <router-link to="/login" class="hover:text-red-500 transition-all duration-300">Login</router-link>

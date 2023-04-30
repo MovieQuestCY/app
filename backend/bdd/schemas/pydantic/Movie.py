@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Optional
 from pydantic import BaseModel
 
 class MovieBase(BaseModel):
@@ -10,7 +11,7 @@ class MovieBase(BaseModel):
     genres: str
     vote_average: float
     popularity: int
-    poster_path: str
+    poster_path: Optional[str]
 
 class MovieCreate(MovieBase):
     """The movie model for creating a new movie"""

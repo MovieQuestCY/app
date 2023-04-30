@@ -8,6 +8,7 @@ import Dashboard from './../pages/Dashboard.vue';
 import UserMovies from './../components/dashboard/UserMovies.vue';
 import UserTeams from './../components/dashboard/UserTeams.vue';
 import FindMovies from './../components/dashboard/FindMovies.vue';
+import Profile from './../components/dashboard/Profile.vue';
 
 export const routes = [
     {
@@ -39,6 +40,10 @@ export const routes = [
         component: Dashboard,
         children: [
             {
+                path: 'profile',
+                component: Profile,
+            },
+            {
                 path: 'movies',
                 component: UserMovies,
             },
@@ -49,7 +54,7 @@ export const routes = [
             {
                 path: 'find',
                 component: FindMovies,
-            }
+            },
         ]
     },
     {

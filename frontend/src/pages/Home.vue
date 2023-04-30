@@ -10,22 +10,32 @@
 
     <section class="container pt-20">
         <div class="w-2/3 mx-auto grid grid-cols-3 gap-10" >
-            <MovieCard class="moviecard w-[100%] h-[450px] col-span-1" v-for="(movie,index) in popularMovies" :key="movie.id" :movie="movie" />
+            <MovieCard class="moviecard w-full col-span-1" v-for="movie in popularMovies" :key="movie.id" :movie="movie" @click="showDialog(movie)" />
         </div>
     </section>
+
+    <MovieDialog v-if="showMovieDialog.show" :movie="showMovieDialog.movie" @close="showMovieDialog.show = false" fromtmbd /> 
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { Movie, User } from '../models/types';
-import UserService from './../services/UserService'
+import { Movie } from '../models/types';
 import MovieService from './../services/MovieService'
 import MovieCard from '../components/MovieCard.vue';
+import MovieDialog from '../components/MovieDialog.vue';
 
-const userService = new UserService();
 const movieService = new MovieService();
 
 const popularMovies = ref<Movie[]>([]);
+const showMovieDialog = ref({
+    show: false,
+    movie: {} as Movie,
+});
+
+const showDialog = (movie: Movie) => {
+    showMovieDialog.value.movie = movie;
+    showMovieDialog.value.show = true;
+};
 
 onMounted(() => {
     movieService.getPopularMovies(3).then((movies) => {

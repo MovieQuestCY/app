@@ -6,6 +6,7 @@ class TeamBase(BaseModel):
     name: str
 
 class TeamCreate(TeamBase):
+    user_id: int
     pass
 
 class Team(TeamBase):

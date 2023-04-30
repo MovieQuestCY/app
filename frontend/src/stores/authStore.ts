@@ -29,7 +29,7 @@ export const useAuthStore = defineStore({
                 this.token = user.token;
                 localStorage.setItem('user', JSON.stringify(user));
                 VueCookies.set('authToken', user.token);
-                router.push('/');
+                router.push('/dashboard/profile');
             } else {
                 switch (response.status) {
                     case 401:
@@ -44,8 +44,14 @@ export const useAuthStore = defineStore({
         async logout() {
             this.user = {} as User;
             localStorage.removeItem('user');
+            localStorage.removeItem('movies');
+            localStorage.removeItem('teams');
             VueCookies.remove('authToken');
             router.push('/login');
+        },
+        async setUser(user: User) {
+            this.user = user;
+            localStorage.setItem('user', JSON.stringify(user));
         }
     }
 });

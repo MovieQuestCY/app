@@ -1,6 +1,7 @@
 from moviequesttypes import PMovie, PMovieCreate
-from moviequesttypes import Movie
+from moviequesttypes import Movie, User
 from sqlalchemy.orm import Session
+from typing import List
 
 def get_movies(db: Session, skip=int, limit=int) -> Movie:
     return db.query(Movie).offset(skip).limit(limit).all()
@@ -52,3 +53,25 @@ def delete_movie(db: Session, movie_id: int) -> Movie:
     db.delete(db_movie)
     db.commit()
     return db_movie
+
+def user_watched_movie(db: Session, movie_id: int, user_id: int) -> Movie:
+    db_movie = db.query(Movie).filter(Movie.id == movie_id).first()
+    db_user = db.query(User).filter(User.id == user_id).first()
+    db_user.movies.append(db_movie)
+    db.commit()
+    db.refresh(db_movie)
+    return db_movie
+
+def user_unwatched_movie(db: Session, movie_id: int, user_id: int) -> Movie:
+    db_movie = db.query(Movie).filter(Movie.id == movie_id).first()
+    db_user = db.query(User).filter(User.id == user_id).first()
+    db_user.movies.remove(db_movie)
+    db.commit()
+    db.refresh(db_movie)
+    return db_movie
+
+def user_watched_movies(db: Session, user_id: int) -> List[Movie]:
+    return db.query(Movie).filter(Movie.users.any(id=user_id)).all()
+
+def movie_watchedby_users(db: Session, movie_id: int) -> List[User]:
+    return db.query(User).filter(User.movies.any(id=movie_id)).all()

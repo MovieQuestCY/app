@@ -1,8 +1,7 @@
 from typing import List
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
-from ..controllers.teams import create_team, get_team, get_teams, add_user_to_team, get_team_by_name, remove_user_from_team, delete_team, edit_team, get_users_from_team
-from ..controllers.users import get_user
+from ..controllers.teams import create_team, get_team, get_teams, add_user_to_team, get_team_by_name, remove_user_from_team, delete_team, edit_team, get_users_from_team, get_teams_from_user
 from moviequesttypes import PTeam, PTeamCreate, PUser
 from ..db import SessionLocal
 
@@ -85,13 +84,13 @@ def add_user_to_team_route(team_id: int, user_id: int, db: Session = Depends(get
     Returns:
         sqlalchemy.User: The user with the given id
     """
-    db_user = get_user(db, user_id=user_id)
     db_team = get_team(db, team_id=team_id)
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
     if db_team is None:
         raise HTTPException(status_code=404, detail="Team not found")
-    return add_user_to_team(db=db, user=db_user, team=db_team)
+    user = add_user_to_team(db=db, user_id=user_id, team=db_team)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
     
 @teams_router.get("/by_name/{name}", response_model=PTeam)
 def get_team_by_name_route(name: str, db: Session = Depends(get_db)) -> PTeam:
@@ -127,13 +126,13 @@ def remove_user_from_team_route(team_id: int, user_id: int, db: Session = Depend
     Returns:
         sqlalchemy.User: The user with the given id
     """
-    db_user = get_user(db, user_id=user_id)
     db_team = get_team(db, team_id=team_id)
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
     if db_team is None:
         raise HTTPException(status_code=404, detail="Team not found")
-    return remove_user_from_team(db=db, user=db_user, team=db_team)
+    user = remove_user_from_team(db=db, user_id=user_id, team=db_team)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 @teams_router.delete("/{team_id}")
 def delete_team_route(team_id: int, db: Session = Depends(get_db)) -> PTeam:
@@ -197,3 +196,19 @@ def get_users_in_team_route(team_id: int, db: Session = Depends(get_db)) -> List
     if db_team is None:
         raise HTTPException(status_code=404, detail="Team not found")
     return get_users_from_team(db=db, team_id=team_id)
+
+@teams_router.get("/{user_id}/teams", response_model=List[PTeam])
+def get_teams_from_user_route(user_id: int, db: Session = Depends(get_db)) -> List[PTeam]:
+    """The endpoint for getting the teams a user is in
+
+    Args:
+        user_id (int): The id of the user
+        db (Session): The sqlalchemy session
+
+    Raises:
+        HTTPException: If the user does not exist
+
+    Returns:
+        List[Team]: A list of teams
+    """
+    return get_teams_from_user(db=db, user_id=user_id)

@@ -1,8 +1,8 @@
 from typing import List
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
-from ..controllers.movies import create_movie, get_movie, get_movies, get_movie_by_title, delete_movie, edit_movie
-from moviequesttypes import PMovie, PMovieCreate
+from ..controllers.movies import create_movie, get_movie, get_movies, get_movie_by_title, delete_movie, edit_movie, user_watched_movie, user_unwatched_movie, user_watched_movies, movie_watchedby_users
+from moviequesttypes import PMovie, PMovieCreate, PUser
 from ..db import SessionLocal
 
 movie_router = APIRouter(prefix="/movies")
@@ -57,6 +57,24 @@ def delete_movie_route(movie_id: int, db: Session = Depends(get_db)) -> PMovie:
         raise HTTPException(status_code=404, detail="Movie not found")
     return delete_movie(db, movie_id=movie_id)
 
+@movie_router.post("/{user_id}/watched/{movie_id}", response_model=PMovie)
+def user_watched_movie_route(user_id: int, movie_id: int, db: Session = Depends(get_db)) -> PMovie:
+    db_movie = get_movie(db, movie_id=movie_id)
+    if db_movie is None:
+        raise HTTPException(status_code=404, detail="Movie not found")
+    return user_watched_movie(db, user_id=user_id, movie_id=movie_id)
 
+@movie_router.post("/{user_id}/unwatched/{movie_id}", response_model=PMovie)
+def user_unwatched_movie_route(user_id: int, movie_id: int, db: Session = Depends(get_db)) -> PMovie:
+    db_movie = get_movie(db, movie_id=movie_id)
+    if db_movie is None:
+        raise HTTPException(status_code=404, detail="Movie not found")
+    return user_unwatched_movie(db, user_id=user_id, movie_id=movie_id)
 
+@movie_router.get("/{user_id}/watched", response_model=List[PMovie])
+def user_watched_movies_route(user_id: int, db: Session = Depends(get_db)) -> List[PMovie]:
+    return user_watched_movies(db, user_id=user_id)
 
+@movie_router.get("/{movie_id}/watchedby", response_model=List[PUser])
+def movie_watchedby_users_route(movie_id: int, db: Session = Depends(get_db)) -> List[PUser]:
+    return movie_watchedby_users(db, movie_id=movie_id)

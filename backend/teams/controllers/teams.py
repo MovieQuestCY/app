@@ -50,11 +50,12 @@ def create_team(db: Session, team: PTeamCreate) -> Team:
     """
     db_team = Team(name=team.name)
     db.add(db_team)
+    add_user_to_team(db=db, user_id=team.user_id, team=db_team)
     db.commit()
     db.refresh(db_team)
     return db_team
 
-def add_user_to_team(db: Session, user: User, team: Team) -> User:
+def add_user_to_team(db: Session, user_id: int, team: Team) -> User:
     """Add a user to a team
 
     Args:
@@ -65,12 +66,15 @@ def add_user_to_team(db: Session, user: User, team: Team) -> User:
     Returns:
         User: The user with the added team
     """
+    user = db.query(User).filter(User.id == user_id).first()
+    if user is None:
+        return None
     user.teams.append(team)
     db.commit()
     db.refresh(user)
     return user
 
-def remove_user_from_team(db: Session, user: PUser, team: PTeam) -> User:
+def remove_user_from_team(db: Session, user_id: int, team: PTeam) -> User:
     """Remove a user from a team
 
     Args:
@@ -81,7 +85,9 @@ def remove_user_from_team(db: Session, user: PUser, team: PTeam) -> User:
     Returns:
         User: The removed user
     """
-    db_user = user
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if db_user is None:
+        return None
     db_team = team
     db_user.teams.remove(db_team)
     db.commit()
@@ -129,5 +135,16 @@ def get_users_from_team(db: Session, team_id: int) -> list:
     Returns:
         list: A list of users
     """
-    #db_team = get_team(db, team_id=team_id)
     return db.query(User).filter(User.teams.any(id=team_id)).all()
+
+def get_teams_from_user(db: Session, user_id: int) -> list:
+    """Get a list of teams from a user
+
+    Args:
+        db (Session): The sqlalchemy session
+        user_id (int): The id of the user
+
+    Returns:
+        list: A list of teams
+    """
+    return db.query(Team).filter(Team.users.any(id=user_id)).all()
