@@ -5,6 +5,7 @@ import { getGenresFromIds, getGenreFromObjects } from "../utils";
 class MovieService {
     private movieApiUrl = import.meta.env.VITE_APP_MOVIES_API_URL;
     private tmdbApiUrl = "https://api.themoviedb.org/3";
+    private dbToken = localStorage.getItem("token");
     private static instance: MovieService;
 
     static getInstance() {
@@ -24,7 +25,7 @@ class MovieService {
     }
 
     async findOrCreate(id: number): Promise<Movie | undefined> {
-        const dbResponse = await fetch(`${this.movieApiUrl}${id}`);
+        const dbResponse = await fetch(`${this.movieApiUrl}${id}?authToken=${this.dbToken}`);
         const dbMovie = await dbResponse.json();
         if(dbMovie.id) {
             return dbMovie;
@@ -37,7 +38,7 @@ class MovieService {
         } as Movie;
 
         try {
-            await fetch(this.movieApiUrl, {
+            await fetch(this.movieApiUrl + `?authToken=${this.dbToken}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -51,7 +52,13 @@ class MovieService {
     }
 
     async getAllMovies(): Promise<Movie[]> {
-        const response = await fetch(this.movieApiUrl);
+        const response = await fetch(this.movieApiUrl + `?authToken=${this.dbToken}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.dbToken}`
+            },
+        });
         const movies = await response.json() as Movie[];
         return movies;
     }
@@ -73,13 +80,19 @@ class MovieService {
     }
 
     async getWatchedByUser(userId: number): Promise<Movie[]> {
-        const response = await fetch(`${this.movieApiUrl}${userId}/watched`);
+        const response = await fetch(`${this.movieApiUrl}${userId}/watched?authToken=${this.dbToken}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.dbToken}`
+            },
+            });
         const movies = await response.json() as Movie[];
         return movies;
     }
 
     async isWatchedByUser(userId: number, movieId: number): Promise<boolean> {
-        const response = await fetch(`${this.movieApiUrl}${movieId}/watchedby`);
+        const response = await fetch(`${this.movieApiUrl}${movieId}/watchedby?authToken=${this.dbToken}`);
         const users = await response.json() as User[];
         const user = users.some(user => user.id === userId);
         return user;
@@ -87,39 +100,25 @@ class MovieService {
 
     async userWatchedMovie(userId: number, movieId: number): Promise<void> {
         await this.findOrCreate(movieId);
-        await fetch(`${this.movieApiUrl}${userId}/watched/${movieId}`, {
+        await fetch(`${this.movieApiUrl}${userId}/watched/${movieId}?authToken=${this.dbToken}`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.dbToken}`
             },
             body: JSON.stringify({userId, movieId})
         });
     }
 
     async userUnwatchedMovie(userId: number, movieId: number): Promise<void> {
-        await fetch(`${this.movieApiUrl}${userId}/unwatched/${movieId}`, {
+        await fetch(`${this.movieApiUrl}${userId}/unwatched/${movieId}?authToken=${this.dbToken}`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.dbToken}`
             },
             body: JSON.stringify({userId, movieId})
         });
-    }
-
-    async createMovie(movie: Movie): Promise<Movie> {
-        const isImageExisting = await fetch(movie.poster_path);
-        if(!isImageExisting.ok) {
-            movie.poster_path = "";
-        }
-        const response = await fetch(this.movieApiUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(movie)
-        });
-        const newMovie = await response.json() as Movie;
-        return newMovie;
     }
 
     async getFindings(): Promise<Movie[]> {

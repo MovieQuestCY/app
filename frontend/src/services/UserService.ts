@@ -2,6 +2,7 @@ import { Team, User, UserCreation } from "../models/types";
 
 class UserService {
     private userApiUrl = import.meta.env.VITE_APP_USERS_API_URL;
+    private dbToken = localStorage.getItem("token");
     private static instance: UserService;
 
     static getInstance() {
@@ -12,19 +13,19 @@ class UserService {
     }
 
     async getUser(id: number): Promise<User> {
-        const response = await fetch(`${this.userApiUrl}${id}/`);
+        const response = await fetch(`${this.userApiUrl}${id}?authToken=${this.dbToken}`);
         const user = await response.json();
         return user;
     }
 
     async getAllUsers(): Promise<User[]> {
-        const response = await fetch(this.userApiUrl);
+        const response = await fetch(this.userApiUrl + `?authToken=${this.dbToken}`);
         const users = await response.json() as User[];
         return users;
     }
 
     async editUser(user: User): Promise<User> {
-        const response = await fetch(`${this.userApiUrl}${user.id}/`, {
+        const response = await fetch(`${this.userApiUrl}${user.id}?authToken=${this.dbToken}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

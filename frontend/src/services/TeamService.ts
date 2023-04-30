@@ -2,6 +2,7 @@ import { Team, TeamResponse, User } from "../models/types";
 
 class TeamService {
     private teamApiUrl = import.meta.env.VITE_APP_TEAMS_API_URL;
+    private dbToken = localStorage.getItem("token");
     private static instance: TeamService;
 
     static getInstance() {
@@ -12,7 +13,7 @@ class TeamService {
     }
 
     async getTeam(id: number): Promise<TeamResponse> {
-        const response = await fetch(`${this.teamApiUrl}/${id}`);
+        const response = await fetch(`${this.teamApiUrl}/${id}?authToken=${this.dbToken}`);
         const team = await response.json();
         return team;
     }
@@ -24,7 +25,7 @@ class TeamService {
     }
 
     async createTeam(name: string, userId: number): Promise<TeamResponse> {
-        const response = await fetch(this.teamApiUrl, {
+        const response = await fetch(this.teamApiUrl + `?authToken=${this.dbToken}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -39,7 +40,7 @@ class TeamService {
     }
 
     async addUserToTeam(teamId: number, userId: number): Promise<Team> {
-        const response = await fetch(`${this.teamApiUrl}${teamId}/add_user/${userId}`, {
+        const response = await fetch(`${this.teamApiUrl}${teamId}/add_user/${userId}?authToken=${this.dbToken}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -50,7 +51,7 @@ class TeamService {
     }
 
     async removeUserFromTeam(teamId: number, userId: number): Promise<Team> {
-        const response = await fetch(`${this.teamApiUrl}${teamId}/remove_user/${userId}`, {
+        const response = await fetch(`${this.teamApiUrl}${teamId}/remove_user/${userId}?authToken=${this.dbToken}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -61,13 +62,13 @@ class TeamService {
     }
 
     async getUserTeams(userId: number): Promise<Team[]> {
-        const response = await fetch(`${this.teamApiUrl}${userId}/teams/`);
+        const response = await fetch(`${this.teamApiUrl}${userId}/teams?authToken=${this.dbToken}`);
         const teams = await response.json() as Team[];
         return teams;
     }
 
     async getTeamMembers(teamId: number): Promise<User[]> {
-        const response = await fetch(`${this.teamApiUrl}${teamId}/users/`);
+        const response = await fetch(`${this.teamApiUrl}${teamId}/users?authToken=${this.dbToken}`);
         const team = await response.json() as User[];
         return team;
     }
