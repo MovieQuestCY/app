@@ -27,6 +27,7 @@ export const useAuthStore = defineStore({
                 this.user = user as User;
                 this.token = user.token;
                 localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('token', user.token);
                 router.push('/');
             } else {
                 switch (response.status) {
