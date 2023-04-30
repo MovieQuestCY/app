@@ -2,7 +2,6 @@ import {defineStore} from 'pinia';
 import { User } from '../models/types';
 import UserService from '../services/UserService';
 import router from '../routes';
-import VueCookies from 'vue-cookies';
 
 const userService = new UserService();
 
@@ -28,8 +27,7 @@ export const useAuthStore = defineStore({
                 this.user = user as User;
                 this.token = user.token;
                 localStorage.setItem('user', JSON.stringify(user));
-                VueCookies.set('authToken', user.token);
-                router.push('/dashboard/profile');
+                router.push('/');
             } else {
                 switch (response.status) {
                     case 401:
@@ -46,7 +44,6 @@ export const useAuthStore = defineStore({
             localStorage.removeItem('user');
             localStorage.removeItem('movies');
             localStorage.removeItem('teams');
-            VueCookies.remove('authToken');
             router.push('/login');
         },
         async setUser(user: User) {

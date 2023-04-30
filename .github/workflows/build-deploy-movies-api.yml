@@ -1,8 +1,8 @@
-name: build-deploy-front
+name: build-deploy-movies-api
 on:
   push:
     paths:
-    - 'frontend/**'
+    - 'backend/users/**'
   workflow_dispatch:
 jobs:
   docker:
@@ -28,13 +28,12 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./frontend
+          context: ./backend/
+          file: ./backend/movies/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/moviequestcy/front:latest
-          secrets: |
-            "TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}"
+            ghcr.io/moviequestcy/movies-api:latest
         
 
   redeploy:
